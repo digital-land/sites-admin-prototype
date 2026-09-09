@@ -1,0 +1,142 @@
+{% extends "layouts/main.html" %}
+
+{% set mainNavActive = "manage-form" %}
+{% set showSiteSubmissionsNav = true %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-l">
+        Review the questions in the call for sites form
+      </h1>
+
+      <form class="form" action="/add-a-question" method="post">
+
+
+        {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% call govukInsetText() %}
+  You cannot change or remove any of these questions.
+{% endcall %}
+
+        <h2 class="govuk-heading-m">
+        Submitted on behalf of someone else
+      </h2>
+
+      <p class="govuk-body">Questions in this section:</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>Are you submitting this site on behalf of someone else?</li>
+  <li>What type of person or organisation are you submitting this site on behalf of?</li>
+  <li>What is their main connection to the site?</li>
+  <li>Tell us what their connection to the site is</li>
+  <li>Enter their contact details</li>
+</ul>
+
+
+ <h2 class="govuk-heading-m">
+        Your details
+      </h2>
+
+      <p class="govuk-body">Questions in this section:</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>Which best describes you or your organisation?</li>
+  <li>What is your main connection to the site?</li>
+  <li>Tell us what your connection to the site is</li>
+  <li>Enter your contact details</li>
+</ul>
+
+
+<h2 class="govuk-heading-m">
+        Site location and boundary
+      </h2>
+
+      <p class="govuk-body">Site submitters can find the site location and boundary by:</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>entering a postcode</li>
+  <li>finding it on a map</li>
+</ul>
+
+<p>Submitters will add a description to the site boundary.</p>
+
+
+<h2 class="govuk-heading-m">
+        Constraints
+      </h2>
+
+      <p>We identify potential constraints by checking the site with the <a href="https://planning.data.gov.uk/" >Planning Data Platform (link opens in new tab)</a>.</p>
+
+      <p class="govuk-body">For each identified constraint, we will ask the site submitter:</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>Will you mitigate this constraint? </li>
+  <li>Tell us how you will mitigate this constraint</li>
+</ul>
+
+  <p class="govuk-body">Other questions in this section:</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>Are you aware of any other constraints? </li>
+  <li>Tell us about the other constraints and how you will mitigate them</li>
+</ul>
+
+
+<h2 class="govuk-heading-m">
+        Site use
+      </h2>
+
+      <p class="govuk-body">Questions in this section:</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>What is the site currently used for?</li>
+  <li>Provide usage description</li>
+  <li>Are there existing uses on this site with a lease?</li>
+  <li>What could the site be used for?</li>
+  <li>Provide usage description</li>
+  <li>How many permanent jobs will this site create?</li>
+  <li>How many homes will this site create?</li>
+  <li>Are you willing for this site to be joined with adjacent sites or used for multiple developments?</li>
+  <li>Does the site have multiple land owners?</li>
+  <li>Enter the names and addresses of the site owners</li>
+  <li>Are there any access issues with the site?</li>
+  <li>Is there existing vehicle access to and from the public highway?</li>
+  <li>Will you provide new vehicle access to the site?</li>
+  <li>Explain how you will provide vehicle access to and from the public highway</li>
+</ul>
+
+<h2 class="govuk-heading-m">
+        Additional information
+      </h2>
+
+      <p class="govuk-body">Questions in this section:</p>
+<ul class="govuk-list govuk-list--bullet">
+<li>Does the site have any contamination or pollution constraints?</li>
+<li>Tell us what dangerous substances are at this site</li>
+<li>Does the site have any of these constraints? (optional)</li>
+<li>Tell us about these constraints</li>
+<li>Has the site been marketed?</li>
+<li>Tell us how the site has been marketed</li>
+<li>When do you expect the site to be ready for development? (optional)</li>
+<li>When do you expect the development to be complete? (optional)</li>
+<li>Add any other comments about the site (optional)</li>
+
+</ul>
+
+{{ govukButton({
+          text: "Continue"
+        }) }}
+      
+    </div>
+  </div>
+
+{% endblock %}

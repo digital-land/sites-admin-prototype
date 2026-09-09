@@ -1,0 +1,100 @@
+{% extends "layouts/main.html" %}
+
+{% set mainNavActive = "manage-form" %}
+{% set showSiteSubmissionsNav = true %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+
+
+      <h1 class="govuk-heading-l">
+       Published form details
+      </h1>
+
+      <p>Published on 10 January 2026</p>
+
+      <form class="form" action="/dashboard-published-form" method="post">
+
+      <input type="hidden" name="returnToPublishedDashboard" value="true">
+
+ {{ govukSummaryList({
+        rows: [
+          {
+            key: { text: "Call for sites questions" },
+            value: { text: "Reviewed" },
+            actions: { items: [{ href: "/view-questions", text: "View", visuallyHiddenText: "Call for sites questions" }] }
+          }
+        ]
+      }) }}
+
+ {% if data['addQuestion'] == 'Yes' %}
+ {{ govukSummaryList({
+        rows: [
+          {
+            key: { text: "Add question" },
+            value: { text: data['addQuestion'] if data['addQuestion'] else "Not provided" }
+          },
+
+          {
+            key: { text: "Local constraint question" },
+            value: { text: data['enterQuestion'] if data['enterQuestion'] else "Not provided" }
+          }
+        ]
+      }) }}
+ {% else %}
+ {{ govukSummaryList({
+        rows: [
+          {
+            key: { text: "Add question" },
+            value: { text: data['addQuestion'] if data['addQuestion'] else "Not provided" }
+          }
+        ]
+      }) }}
+ {% endif %}
+
+ <h2 class="govuk-heading-m">
+       Published form
+  </h2>
+
+ {% from "govuk/components/input/macro.njk" import govukInput %}
+
+{{ govukInput({
+  classes: "govuk-input--width- app-grey-input",
+  id: "form-link",
+  name: "formLink",
+  value: "https://planhampshireboroughcouncilcallforsitesform"
+}) }}
+
+<p><a href="https://blank" target="_blank">View published form (opens in new tab)</a></p>
+     
+ <h2 class="govuk-heading-m">
+       What happens next
+  </h2>
+
+  <p>Share the published link on your website.</p>
+
+  <p>For more information, <a href="blank" target=blabk >visit create or update your local plans guidance (opens in a new tab).</a></p>
+
+{{ govukButton({
+          text: "Return to dashboard"
+        }) }}
+      
+    </div>
+  </div>
+
+{% endblock %}

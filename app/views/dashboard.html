@@ -1,0 +1,37 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName="Home" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Dashboard
+    </h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row dashboard-cards">
+  <div class="govuk-grid-column-one-third">
+    <a class="app-card-link" href="/view-questions">
+      <div class="app-card">
+        <h3 class="govuk-heading-m">Create a Call for sites form</h3>
+        <p>Review the questions, add a local constraints question and create a link to share the form. </p>
+      </div>
+    </a>
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+    <a class="app-card-link" href="/manage-editors">
+      <div class="app-card">
+        <h3 class="govuk-heading-m">Manage access</h3>
+        <p>Invite team members and manage their access to the form and submissions.</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+{% endblock %}
+
+

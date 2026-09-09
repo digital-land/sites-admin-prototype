@@ -4,3 +4,107 @@ https://prototype-kit.service.gov.uk/docs/how-to-use-layouts
 #}
 
 {% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
+
+
+{% block header %}
+  {{ govukHeader({
+    homepageUrl: "/",
+    serviceName: serviceName if not useServiceNavigation,
+    serviceUrl: serviceUrl if not useServiceNavigation,
+    containerClasses: containerClasses
+  }) }}
+  {% if useServiceNavigation %}
+    {% if showSiteSubmissionsNav and data['formCreated'] %}
+      {% set navItems = [
+
+        {
+          href: "/site-submissions",
+          text: "View site submissions",
+          active: mainNavActive == "site-submissions"
+        },
+        {
+          href: formNavHref if formNavHref else "/view-questions",
+          text: "Manage form" if data['formCreated'] else "Create form",
+          active: mainNavActive == "manage-form"
+        },
+        
+        {
+          href: "/manage-editors",
+          text: "Manage access",
+          active: mainNavActive == "manage-editors"
+        },
+        {
+          href: "/",
+          text: "Sign out"
+        }
+      ] %}
+    {% else %}
+      {% set navItems = [
+        {
+          href: formNavHref if formNavHref else "/view-questions",
+          text: "Manage form" if data['formCreated'] else "Create form",
+          active: mainNavActive == "manage-form"
+        },
+        {
+          href: "/manage-editors",
+          text: "Manage access",
+          active: mainNavActive == "manage-editors"
+        },
+        {
+          href: "/",
+          text: "Sign out"
+        }
+      ] %}
+    {% endif %}
+    {{ govukServiceNavigation({
+      serviceName: serviceName,
+      serviceUrl: serviceUrl,
+      classes: "app-main-navigation",
+      containerClasses: "govuk-width-container wide-container",
+      navigation: navItems
+    }) }}
+  {% endif %}
+{% endblock %}
+
+
+
+{% if (GOVUKPrototypeKit.isDevelopment) %}
+  {% set footerItems = [
+    {
+      href: "/manage-prototype",
+      text: "Manage your prototype"
+    }, {
+      href: "/manage-prototype/clear-data",
+      text: "Clear data"
+    }
+  ] %}
+{% else %}
+  {% set footerItems = [
+    {
+      href: "/manage-prototype/clear-data",
+      text: "Clear data"
+    }
+  ] %}
+{% endif %}
+
+{# 
+  Because the macro is used inside `set` rather than a `block`
+  `govukFooter` needs to be explicitly imported
+#}
+{% from 'govuk/components/footer/macro.njk' import govukFooter %}
+{% set govukFooterHtml %}
+  {{ govukFooter({
+    meta: {
+      items: footerItems,
+      visuallyHiddenTitle: "Footer links"
+    },
+    containerClasses: containerClasses
+  }) }}
+{% endset %}
+
+{# Override only the GOV.UK Footer component for GOV.UK Frontend >=6.0.0 #}
+{% block govukFooter %}{{govukFooterHtml | safe}}{% endblock %}
+
+{% block footer %}
+  {{ super() }}
+{% endblock %}

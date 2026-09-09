@@ -1,0 +1,59 @@
+{% extends "layouts/main.html" %}
+
+{% set mainNavActive = "manage-form" %}
+{% set showSiteSubmissionsNav = true %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+
+      <form class="form" action="/constraints-question-controller" method="post">
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{{ govukRadios({
+  name: "addQuestion",
+  fieldset: {
+    legend: {
+      text: "Do you need to add a question about local constraints?",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  items: [
+    {
+      value: "Yes",
+      text: "Yes"
+    },
+    {
+      value: "No",
+      text: "No"
+    }
+    
+  ]
+}) }}
+
+      
+
+{{ govukButton({
+          text: "Save and continue"
+        }) }}
+      
+    </div>
+  </div>
+
+{% endblock %}

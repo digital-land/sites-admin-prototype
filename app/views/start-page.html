@@ -1,0 +1,156 @@
+{% extends "layouts/main.html" %}
+
+{% block pageTitle %}
+  Mainstream guide example
+{% endblock %}
+
+{# Blank header with no service name for this page #}
+{% block header %}
+  <header>
+    {{govukHeader()}}
+  </header>
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: "#"
+      },
+      {
+        text: "Section",
+        href: "#"
+      },
+      {
+        text: "Subsection"
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block content %}
+<p></p>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <span class="govuk-caption-xl">Guidance</span>
+<h1 class="govuk-heading-xl">Create and manage a call for sites form</h1>
+
+<p>Create a call for sites form and manage sites submitted for your local plan.</p>
+
+<p class="app-applies-to">Applies to England</p>
+
+      <aside class="govuk-prototype-kit-common-templates-mainstream-guide-contents-list" role="complementary">
+        <nav class="govuk-prototype-kit-common-templates-contents-list" aria-label="Pages in this guide" role="navigation">
+          <h2 class="govuk-prototype-kit-common-templates-contents-list__title">
+            Contents
+          </h2>
+          <ol class="govuk-prototype-kit-common-templates-contents-list__list">
+            <li class="govuk-prototype-kit-common-templates-contents-list__list-item govuk-prototype-kit-common-templates-contents-list__list-item--dashed govuk-prototype-kit-common-templates-contents-list__list-item--active">
+              <a href="#overview">
+                Overview
+              </a>
+            </li>
+
+            
+            <li aria-current="true" class="govuk-prototype-kit-common-templates-contents-list__list-item govuk-prototype-kit-common-templates-contents-list__list-item--dashed">
+             <a href="#included">
+                Who can use this service
+             </a>
+            </li>
+
+            <li class="govuk-prototype-kit-common-templates-contents-list__list-item govuk-prototype-kit-common-templates-contents-list__list-item--dashed">
+              <a href="#sign-in">
+                Sign into the service
+              </a>
+            </li>
+          </ol>
+        </nav>
+      </aside>
+
+    </div>
+
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds govuk-prototype-kit-common-templates-mainstream-guide-body">
+      
+  <h2 class="govuk-heading-m" id="overview">
+        Overview
+      </h2>
+      
+      <p>
+          Use this service to create and manage a call for sites form for your local planning authority.
+      </p>
+
+      <p>Once you have signed in, you can:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>review the standard questions included in the form</li>
+        <li>add one local constraints question if you need to</li>
+        <li>publish a link to share with site submitters </li>
+        <li>view and download site submissions</li>
+        <li>invite your team members to access site submissions</li>
+      </ul>
+
+  <h2 class="govuk-heading-m" id="included">
+          Who can use this service
+  </h2>
+
+      <p>You can use this service if you work for a local planning authority in England and are responsible for managing a call for sites process.</p>
+
+
+    <h2 class="govuk-heading-m" id="sign-in">
+          Sign into the service
+      </h2>
+
+      <p>You will need to sign into this service with your council email address.</p>
+
+
+      {% from "govuk/components/button/macro.njk" import govukButton %}
+
+{{ govukButton({
+  text: "Start now",
+  href: "/dashboard",
+  isStartButton: true
+}) }}
+
+
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+
+      <aside class="govuk-prototype-kit-common-templates-related-items" role="complementary">
+        <h2 class="govuk-heading-m" id="subsection-title">
+          Subsection
+        </h2>
+        <nav role="navigation" aria-labelledby="subsection-title">
+          <ul class="govuk-list govuk-!-font-size-16">
+            <li>
+              <a href="#">
+                Create or update your local plan
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                Guidance on publishing your local plan
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+    </div>
+
+  </main>
+</div>
+
+
+
+
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "layouts/main.html" %}
+
+{% set mainNavActive = "manage-editors" %}
+{% set showSiteSubmissionsNav = true %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-l">
+        Invite a new team member
+      </h1>
+
+      <form class="form" action="/manage-editors-invited" method="post">
+
+
+         <p class="govuk-body">You can invite someone to create forms and download site submissions. They must:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>be from the same organisation as you</li>
+        <li>have a council email address</li>
+      </ul>
+
+      {% from "govuk/components/input/macro.njk" import govukInput %}
+
+      {{ govukInput({
+        label: {
+          text: "Enter the email address of the person you want to invite",
+          classes: "govuk-label--m",
+          isPageHeading: true
+        },
+        id: "email-address",
+        name: "emailAddress",
+        classes: "govuk-!-width-two-thirds"
+      }) }}
+
+
+        {{ govukButton({
+          text: "Send invite"
+        }) }}
+
+
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

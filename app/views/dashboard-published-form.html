@@ -1,0 +1,54 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName="Home" %}
+{% set showSiteSubmissionsNav = true %}
+{% set formNavHref = "/review-published-form" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Dashboard
+    </h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row dashboard-cards">
+  <div class="govuk-grid-column-one-third">
+    <a class="app-card-link" href="/site-submissions">
+      <div class="app-card">
+        <h3 class="govuk-heading-m">View site submissions</h3>
+        <p>View and download new site submissions.</p>
+      </div>
+    </a>
+  </div>
+
+
+  <div class="govuk-grid-column-one-third">
+    <a class="app-card-link" href="/review-published-form">
+      <div class="app-card">
+        <h3 class="govuk-heading-m">Manage form</h3>
+        <p>Review the questions, edit the local constraints question or unpublish form.</p>
+      </div>
+    </a>
+  </div>
+
+<div class="govuk-grid-column-one-third">
+    <a class="app-card-link" href="/manage-editors">
+      <div class="app-card">
+        <h3 class="govuk-heading-m">Manage access</h3>
+        <p>Invite team members and manage their access to the form and submissions.</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+
+</div>
+
+
+
+{% endblock %}
+
+

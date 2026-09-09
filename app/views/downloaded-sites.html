@@ -1,0 +1,62 @@
+{% extends "layouts/main.html" %}
+
+{% set mainNavActive = "site-submissions" %}
+{% set showSiteSubmissionsNav = true %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-l">
+        Downloaded sites
+      </h1>
+
+      <form class="form" action="/path/of/next/page" method="post">
+
+
+        {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+
+{{ govukServiceNavigation({
+  serviceUrl: "#",
+  navigation: [
+    {
+      href: "/site-submissions",
+      text: "Submitted sites"
+    },
+    {
+      href: "/downloaded-sites",
+      text: "Downloaded sites",
+      active: true
+    }
+    
+  ]
+}) }}
+
+<p></p>
+
+<p>You have no downloaded site submissions.</p>
+
+
+     
+
+
+
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
