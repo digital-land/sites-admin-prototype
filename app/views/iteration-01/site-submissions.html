@@ -25,22 +25,19 @@
         View site submissions
       </h1>
 
-      <form class="form" action="/path/of/next/page" method="post">
-
-
         {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
 {{ govukServiceNavigation({
   serviceUrl: serviceUrl,
   navigation: [
     {
-      href: "/site-submissions",
-      text: "New submissions"
+      href: "#",
+      text: "New submissions",
+      active: true
     },
     {
-      href: "/downloaded-sites",
-      text: "Downloaded submissions",
-      active: true
+      href: "/iteration-01/downloaded-sites",
+      text: "Downloaded submissions"
     }
     
   ]
@@ -51,15 +48,8 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% call govukInsetText() %}
-  You have no downloaded site submissions.
+  You have no new site submissions.
 {% endcall %}
-
-     
-
-
-
-
-      </form>
 
     </div>
   </div>

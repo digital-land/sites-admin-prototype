@@ -1,0 +1,83 @@
+{% extends "layouts/main.html" %}
+
+{% set mainNavActive = "manage-form" %}
+{% set showSiteSubmissionsNav = true %}
+
+{% block pageTitle %}
+  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+
+      <h1 class="govuk-heading-l">
+       Review your form before publishing
+      </h1>
+
+      <form class="form" action="/iteration-01/published-form" method="post">
+
+        <input type="hidden" name="formCreated" value="true">
+
+      {% set summaryListItems = [
+        {
+          key: { text: "Call for sites questions" },
+          value: { text: "Reviewed" },
+          actions: { items: [{ href: "/iteration-01/view-questions", text: "View", visuallyHiddenText: "Call for sites questions" }] }
+        },
+        {
+          key: { text: "Add question" },
+          value: { text: data['addQuestion'] if data['addQuestion'] else "Not provided" },
+          actions: { items: [{ href: "/iteration-01/add-a-question", text: "Change", visuallyHiddenText: "Add question" }] }
+        }
+      ] %}
+      
+      {% if data['addQuestion'] == 'Yes' %}
+        {% set summaryListItems = (summaryListItems.push({
+          key: { text: "Local constraint question" },
+          value: { text: data['enterQuestion'] if data['enterQuestion'] else "Not provided" },
+          actions: { items: [{ href: "/iteration-01/enter-question", text: "Change", visuallyHiddenText: "Local constraint question" }] }
+        }), summaryListItems) %}
+      {% endif %}
+      
+      {{ govukSummaryList({
+        rows: summaryListItems
+      }) }}
+
+ <h2 class="govuk-heading-m">
+       Preview form
+      </h2>
+
+ {% from "govuk/components/input/macro.njk" import govukInput %}
+
+{{ govukInput({
+  classes: "govuk-input--width- app-grey-input",
+  id: "form-link",
+  name: "formLink",
+  value: "https://planhampshireboroughcouncilcallforsitesform",
+  attributes: {
+    readonly: true
+  }
+}) }}
+
+<p><a href="https://blank" target="_blank">Open preview (opens in new tab)</a></p>
+     
+
+{{ govukButton({
+          text: "Publish"
+        }) }}
+      
+    </div>
+  </div>
+
+{% endblock %}

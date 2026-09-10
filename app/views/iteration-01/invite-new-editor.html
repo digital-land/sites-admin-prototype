@@ -24,7 +24,7 @@
         Invite a new team member
       </h1>
 
-      <form class="form" action="/manage-editors-invited" method="post">
+      <form class="form" action="/iteration-01/manage-editors-invited" method="post">
 
 
          <p class="govuk-body">You can invite someone to create forms and download site submissions. They must:</p>
@@ -43,7 +43,8 @@
         },
         id: "email-address",
         name: "emailAddress",
-        classes: "govuk-!-width-two-thirds"
+        classes: "govuk-!-width-two-thirds",
+        value: data['emailAddress'] if data['emailAddress'] else ""
       }) }}
 
 

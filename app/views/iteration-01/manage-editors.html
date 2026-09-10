@@ -25,8 +25,6 @@
         Manage access
       </h1>
 
-      <form class="form" action="/path/of/next/page" method="post">
-
         {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {{ govukTable({
@@ -72,12 +70,12 @@
 
         {{ govukButton({
           text: "Invite new team member",
-          href: "/invite-new-editor"
+          href: "/iteration-01/invite-new-editor"
         }) }}
 
-        <P>
-        <a href="/dashboard">Return to dashboard</a>
-        </P>
+        <p>
+        <a href="/iteration-01/dashboard">Return to dashboard</a>
+        </p>
       </form>
 
     </div>

@@ -39,9 +39,6 @@
         Manage access
       </h1>
 
-      <form class="form" action="/path/of/next/page" method="post">
-
-     
        {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {{ govukTable({
@@ -93,7 +90,7 @@
         text: "Editor"
       },
       {
-        html: '<a href="/resend-invitation">Resend</a> <span class="app-action-separator" aria-hidden="true">|</span> <a href="/cancel-invitation">Cancel</a>'
+        html: '<a href="/iteration-01/resend-invitation">Resend</a> <span class="app-action-separator" aria-hidden="true">|</span> <a href="/iteration-01/cancel-invitation">Cancel</a>'
       }
     ]
 
@@ -102,14 +99,12 @@
 
         {{ govukButton({
           text: "Invite new team member",
-          href: "/invite-new-editor"
+          href: "/iteration-01/invite-new-editor"
         }) }}
 
         <P>
-        <a href="{{ '/dashboard-published-form' if data['formCreated'] else '/dashboard' }}">Return to dashboard</a>
+        <a href="/iteration-01/dashboard">Return to dashboard</a>
         </P>
-
-      </form>
 
     </div>
   </div>

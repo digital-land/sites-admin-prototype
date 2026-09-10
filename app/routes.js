@@ -8,11 +8,15 @@ const router = govukPrototypeKit.requests.setupRouter()
 
 // Add your routes here
 
-router.post('/constraints-question-controller', (req, res, next) => {
+/**********************************************************
+ * First time user journey
+**********************************************************/
+
+router.post('/iteration-01/constraints-question-controller', (req, res, next) => {
   if (req.session.data['addQuestion'] === 'Yes') {
-    return res.redirect('/enter-question')
+    return res.redirect('/iteration-01/enter-question')
   } else {
-    return res.redirect('/review-form')
+    return res.redirect('/iteration-01/review-form')
   }
 })
 

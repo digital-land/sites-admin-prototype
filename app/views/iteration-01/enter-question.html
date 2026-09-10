@@ -20,7 +20,7 @@
     <div class="govuk-grid-column-two-thirds">
 
   
-      <form class="form" action="/review-form" method="post">
+      <form class="form" action="/iteration-01/review-form" method="post">
 
 
 {% from "govuk/components/input/macro.njk" import govukInput %}
@@ -28,7 +28,7 @@
 {{ govukInput({
   label: {
     name: "enterQuestion",
-    text: "Enter your question ",
+    text: "Enter your question",
     classes: "govuk-label--l",
     isPageHeading: true
   },
@@ -36,7 +36,8 @@
     text: "Ask the question the way you would in person. For example, ‘Is the site affected by airport safeguarding restrictions?’."
   },
   id: "event-name",
-  name: "enterQuestion"
+  name: "enterQuestion",
+  value: data['enterQuestion'] if data['enterQuestion'] else ""
 }) }}
 
 
