@@ -1,5 +1,6 @@
 {% extends "layouts/main.html" %}
 
+{% set serviceUrl = '/dashboard-published-form' if data['returnToPublishedDashboard'] else '/dashboard' %}
 {% set mainNavActive = "manage-form" %}
 {% set showSiteSubmissionsNav = true %}
 
@@ -34,7 +35,7 @@
 {% endcall %}
 
         <h2 class="govuk-heading-m">
-        Submitted on behalf of someone else
+        Section one: submitting on behalf of someone else
       </h2>
 
       <p class="govuk-body">Questions in this section:</p>
@@ -48,7 +49,7 @@
 
 
  <h2 class="govuk-heading-m">
-        Your details
+        Section two: your details
       </h2>
 
       <p class="govuk-body">Questions in this section:</p>
@@ -61,7 +62,7 @@
 
 
 <h2 class="govuk-heading-m">
-        Site location and boundary
+        Section three: site location and boundary
       </h2>
 
       <p class="govuk-body">Site submitters can find the site location and boundary by:</p>
@@ -74,7 +75,7 @@
 
 
 <h2 class="govuk-heading-m">
-        Constraints
+       Section four: constraints
       </h2>
 
       <p>We identify potential constraints by checking the site with the <a href="https://planning.data.gov.uk/" >Planning Data Platform (link opens in new tab)</a>.</p>
@@ -93,7 +94,7 @@
 
 
 <h2 class="govuk-heading-m">
-        Site use
+        Section five: site use
       </h2>
 
       <p class="govuk-body">Questions in this section:</p>
@@ -115,7 +116,7 @@
 </ul>
 
 <h2 class="govuk-heading-m">
-        Additional information
+        Section six: additional information
       </h2>
 
       <p class="govuk-body">Questions in this section:</p>

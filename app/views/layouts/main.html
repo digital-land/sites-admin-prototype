@@ -58,7 +58,7 @@ https://prototype-kit.service.gov.uk/docs/how-to-use-layouts
     {% endif %}
     {{ govukServiceNavigation({
       serviceName: serviceName,
-      serviceUrl: serviceUrl,
+      serviceUrl: serviceUrl if serviceUrl else ('/dashboard-published-form' if data['returnToPublishedDashboard'] else '/dashboard'),
       classes: "app-main-navigation",
       containerClasses: "govuk-width-container wide-container",
       navigation: navItems

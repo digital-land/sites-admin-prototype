@@ -1,5 +1,6 @@
 {% extends "layouts/main.html" %}
 
+{% set serviceUrl = '/dashboard-published-form' if data['formCreated'] else '/dashboard' %}
 {% set mainNavActive = "manage-editors" %}
 {% set showSiteSubmissionsNav = true %}
 
@@ -105,7 +106,7 @@
         }) }}
 
         <P>
-        <a href="{{ '/dashboard-published-form' if data['returnToPublishedDashboard'] else '/dashboard' }}">Return to dashboard</a>
+        <a href="{{ '/dashboard-published-form' if data['formCreated'] else '/dashboard' }}">Return to dashboard</a>
         </P>
 
       </form>

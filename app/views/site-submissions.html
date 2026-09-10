@@ -1,7 +1,9 @@
 {% extends "layouts/main.html" %}
 
+{% set serviceUrl = "/dashboard-published-form" %}
 {% set mainNavActive = "site-submissions" %}
 {% set showSiteSubmissionsNav = true %}
+{% set formNavHref = "/review-published-form" %}
 
 {% block pageTitle %}
   Question page template – {{ serviceName }} – GOV.UK Prototype Kit
@@ -20,7 +22,7 @@
     <div class="govuk-grid-column-full">
 
       <h1 class="govuk-heading-l">
-        Submitted sites
+        View site submissions
       </h1>
 
       <form class="form" action="/path/of/next/page" method="post">
@@ -29,16 +31,16 @@
         {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
 {{ govukServiceNavigation({
-  serviceUrl: "#",
+  serviceUrl: serviceUrl,
   navigation: [
     {
       href: "#",
-      text: "Submitted sites",
+      text: "New submissions",
       active: true
     },
     {
       href: "/downloaded-sites",
-      text: "Downloaded sites"
+      text: "Downloaded submissions"
     }
     
   ]
@@ -46,10 +48,13 @@
 
 <p></p>
 
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
-<p>You have no new site submissions.</p>
+{% call govukInsetText() %}
+  You have no new site submissions.
+{% endcall %}
 
-    
+ 
 
       </form>
 

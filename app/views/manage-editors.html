@@ -1,5 +1,6 @@
 {% extends "layouts/main.html" %}
 
+{% set serviceUrl = '/dashboard-published-form' if data['formCreated'] else '/dashboard' %}
 {% set mainNavActive = "manage-editors" %}
 {% set showSiteSubmissionsNav = true %}
 
