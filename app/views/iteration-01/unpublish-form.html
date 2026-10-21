@@ -1,0 +1,54 @@
+{% extends "layouts/main.html" %}
+
+{% set mainNavActive = "manage-form" %}
+{% set showSiteSubmissionsNav = true %}
+
+{% set pageName="Are you sure want to unpublish your call for sites form?" %}
+
+{% block pageTitle %}
+{{ pageName }} – {{ serviceName }}
+{% endblock %}
+
+{% block containerStart %}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form class="form" action="/iteration-01/review-form" method="post">
+      
+      {{ govukRadios({
+        name: "unpublishForm",
+        fieldset: {
+          legend: {
+            text: pageName,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        items: [
+          {
+            value: "Yes",
+            text: "Yes"
+          },
+          {
+            value: "No",
+            text: "No"
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Unpublish form"
+      }) }}
+      
+    </form>
+    
+  </div>
+</div>
+
+{% endblock %}

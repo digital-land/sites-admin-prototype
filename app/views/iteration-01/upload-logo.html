@@ -1,0 +1,51 @@
+{% extends "layouts/main.html" %}
+
+{% set mainNavActive = "manage-form" %}
+{% set showSiteSubmissionsNav = true %}
+
+{% set pageName = "Upload your local authority logo" %}
+
+{% block pageTitle %}
+{{ pageName }} – {{ serviceName }}
+{% endblock %}
+
+{% block containerStart %}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">{{ pageName }}</h1>
+
+    <p>Your logo will appear on every page of your call for sites form.</p>
+
+    <p>If you do not upload a logo, your local authority name will be shown instead.</p>
+
+    <form class="form" action="/iteration-01/choose-header-colour" method="post">
+      {{ govukFileUpload({
+        id: "logo-upload-1",
+        name: "logoUpload",
+        label: {
+          text: "Upload your logo (optional)",
+          classes: "govuk-label--m"
+        },
+        hint: {
+          text: "We recommend you upload an SVG file."
+        },
+        javascript: true
+      }) }}
+      
+      {{ govukButton({
+        text: "Save and continue"
+      }) }}
+    </form>
+    
+  </div>
+</div>
+
+{% endblock %}

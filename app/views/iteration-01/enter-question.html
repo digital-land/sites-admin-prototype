@@ -3,53 +3,44 @@
 {% set mainNavActive = "manage-form" %}
 {% set showSiteSubmissionsNav = true %}
 
+{% set pageName = "Enter your question" %}
+
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+  {{ pageName }} – {{ serviceName }}
 {% endblock %}
 
 {% block containerStart %}
-  {{ govukBackLink({
-    text: "Back",
-    href: "javascript:window.history.back()"
-  }) }}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
 {% endblock %}
 
 {% block content %}
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-
-  
-      <form class="form" action="/iteration-01/review-form" method="post">
-
-
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    name: "enterQuestion",
-    text: "Enter your question",
-    classes: "govuk-label--l",
-    isPageHeading: true
-  },
-  hint: {
-    text: "Ask the question the way you would in person. For example, ‘Is the site affected by airport safeguarding restrictions?’."
-  },
-  id: "event-name",
-  name: "enterQuestion",
-  value: data['enterQuestion'] if data['enterQuestion'] else ""
-}) }}
-
-
-        {{ govukButton({
-          text: "Save and continue"
-        }) }}
-
-
-
-      </form>
-
-    </div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    <form class="form" action="/iteration-01/upload-logo" method="post">      
+      {{ govukInput({
+        label: {
+          text: pageName,
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        hint: {
+          text: "Ask the question the way you would in person. For example, ‘Is the site affected by airport safeguarding restrictions?’."
+        },
+        name: "localQuestion",
+        value: data['localQuestion'] if data['localQuestion'] else ""
+      }) }}
+            
+      {{ govukButton({
+        text: "Save and continue"
+      }) }}
+    </form>
+    
   </div>
+</div>
 
 {% endblock %}

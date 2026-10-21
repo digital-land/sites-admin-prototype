@@ -14,41 +14,18 @@
   font-weight: 700;
 }
 
-
-.app-grey-input {
+.app-url-input--readonly {
   background-color: #f3f2f1;
+  font-family: monospace;
 }
 
-govuk-service-navigation .govuk-width-container {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  padding-left: 30px !important;
-  padding-right: 0 !important;
-  max-width: 1200px !important;
+
+.app-main-navigation .app-main-navigation__organisation-name {
+  @include govuk-font($size: 16);
+  @include govuk-responsive-padding(3, "bottom");
 }
 
-.govuk-service-navigation {
-  background: none !important;
-  border-bottom: none !important;
-  padding-left: 0px !important;
-  border-top: 1px solid #b1b4b6 !important;
-  border-bottom: 1px solid #b1b4b6 !important;
-}
-
-.govuk-service-navigation .govuk-service-navigation__container {
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-.govuk-service-navigation__service-name::after {
-  content: "Planhampshire Borough Council";
-  display: block;
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.app-main-navigation .govuk-service-navigation__list > li:last-child {
+.app-main-navigation .app-main-navigation__item--sign-out {
   margin-left: auto;
 }
 
@@ -62,36 +39,13 @@ govuk-service-navigation .govuk-width-container {
   display: flex;
 }
 
-.app-card-link {
-  display: block;
-  width: 100%;
-  color: inherit;
-  text-decoration: none;
-}
-
-
-.app-card-link:focus {
-  outline: 3px solid #ffdd00;
-  outline-offset: 0;
-}
-
 .app-card {
-  border: 1px solid #b1b4b6;
+  border: 1px solid govuk-functional-colour("border");
   padding: 20px;
-  border-top: 10px solid #1d70b8;
+  border-top: 10px solid govuk-functional-colour("brand");
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-}
-
-.app-card .govuk-heading-m {
-  color: #1d70b8;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-.app-card-link:hover .govuk-heading-m {
-  color: #003078;
 }
 
 .view-submission-heading {
@@ -117,3 +71,52 @@ govuk-service-navigation .govuk-width-container {
   color: #b1b4b6;
   font-weight: 300;
 }
+
+.headerColourPreview-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.headerColourSwatch {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-left: 10px;
+  border: 1px solid #b1b4b6;
+}
+
+// Copy button
+.app-copy-button {
+  $copy-button-colour: #00823b;
+
+  @include govuk-font(16);
+  border: 1px solid $copy-button-colour;
+  color: $copy-button-colour;
+  background-color: govuk-colour("white");
+  box-shadow: 0 2px 0 0 govuk-colour("green");
+  padding: 8px 10px 7px 10px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  &:focus:not(:hover) {
+    color: govuk-functional-colour(focus-text);
+    background-color: govuk-functional-colour(focus);
+    box-shadow: 0 2px 0 0 govuk-functional-colour(focus-text);
+  }
+
+  &:active,
+  &:focus {
+    border: 2px solid govuk-functional-colour(focus);
+    outline: 2px solid transparent;
+    box-shadow: none;
+    padding: 7px 9px 6px 9px;
+  }
+
+  &:active {
+    margin-top: 2px;
+    box-shadow: none;
+  }
+}
+

@@ -3,8 +3,10 @@
 {% set mainNavActive = "manage-form" %}
 {% set showSiteSubmissionsNav = true %}
 
+{% set pageName = "Form published" %}
+
 {% block pageTitle %}
-Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{{ pageName }} – {{ serviceName }}
 {% endblock %}
 
 {% block containerStart %}
@@ -16,87 +18,59 @@ Question page template – {{ serviceName }} – GOV.UK Prototype Kit
 
 {% block content %}
 
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    
-    {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-    
-    {% call govukNotificationBanner({
-      type: "success"
-    }) %}
-    <h3 class="govuk-notification-banner__heading">
-      Form published
-    </h3>
-    {% endcall %}
-    
-    <h1 class="govuk-heading-l">
-      Published form details
-    </h1>
-    
-    <p>Published on 10 January 2026</p>
-    
-    <form class="form" action="/iteration-01/dashboard-published-form" method="post">
-      
-      <input type="hidden" name="returnToPublishedDashboard" value="true">
+    {{ govukPanel({
+      titleText: pageName
+    }) }}
 
-      {% set summaryListItems = [
-        {
-          key: { text: "Call for sites questions" },
-          value: { text: "Reviewed" },
-          actions: { items: [{ href: "/iteration-01/view-questions", text: "View", visuallyHiddenText: "Call for sites questions" }] }
-        },
-        {
-          key: { text: "Add question" },
-          value: { text: data['addQuestion'] if data['addQuestion'] else "Not provided" },
-          actions: { items: [{ href: "/iteration-01/add-a-question", text: "Change", visuallyHiddenText: "Add question" }] }
-        }
-      ] %}
-      
-      {% if data['addQuestion'] == 'Yes' %}
-        {% set summaryListItems = (summaryListItems.push({
-          key: { text: "Local constraint question" },
-          value: { text: data['enterQuestion'] if data['enterQuestion'] else "Not provided" },
-          actions: { items: [{ href: "/iteration-01/enter-question", text: "Change", visuallyHiddenText: "Local constraint question" }] }
-        }), summaryListItems) %}
-      {% endif %}
-      
-      {{ govukSummaryList({
-        rows: summaryListItems
-      }) }}
-      
-      <h2 class="govuk-heading-m">
-        Published form
-      </h2>
-      
-      {% from "govuk/components/input/macro.njk" import govukInput %}
-      
-      {{ govukInput({
-        classes: "govuk-input--width- app-grey-input",
-        id: "form-link",
-        name: "formLink",
-        value: "https://planhampshireboroughcouncilcallforsitesform",
-        attributes: {
-          readonly: true
-        }
-      }) }}
-      
-      <p><a href="https://blank" target="_blank">View published form (opens in new tab)</a></p>
-      
-      <h2 class="govuk-heading-m">
-        What happens next
-      </h2>
-      
-      <p>Share the published link on your website.</p>
-      
-      <p>For more information, <a href="blank" target=blabk >visit create or update your local plans guidance (opens in a new tab).</a></p>
-      
-      {{ govukButton({
-        text: "Return to dashboard"
-      }) }}
-      
-    </div>
+    <h2 class="govuk-heading-m">
+      What happens next
+    </h2>
+
+    <p>Share the published link on your website</p>
+    
+    {{ govukInput({
+      classes: "app-url-input--readonly",
+      id: "form-published-link",
+      name: "formLink",
+      value: "https://planhampshireboroughcouncil.submit-site.communities.gov.uk",
+      attributes: {
+        readonly: true
+      }
+    }) }}
+
+    {{ govukButton({
+      text: "Copy link",
+      type: "button",
+      id: "copy-link-button",
+      classes: "app-copy-button",
+      attributes: {
+        "data-copy-target": "form-published-link"
+      }
+    }) }}
+    
+    <p><a href="about:blank" target="_blank">View published form (opens in new tab)</a></p>
+    
+    <p>For more information, <a href="about:blank" target="_blank">visit create or update your local plans guidance (opens in a new tab)</a>.</p>
+
+    <h2 class="govuk-heading-m">Edit or unpublish your form</h2>
+
+    <p>Unpublish your form:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>to make changes to it</li>
+      <li>when your call for sites has ended</li>
+    </ul>
+
+    {{ govukButton({
+      text: "Unpublish",
+      href: "/iteration-01/unpublish"
+    }) }}
+
+    <p><a href="/iteration-01/dashboard">Return to dashboard</a></p>
+
   </div>
-  
-  {% endblock %}
+</div>  
+{% endblock %}
   

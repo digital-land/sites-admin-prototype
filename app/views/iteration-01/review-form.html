@@ -3,32 +3,57 @@
 {% set mainNavActive = "manage-form" %}
 {% set showSiteSubmissionsNav = true %}
 
+{% if data['formPublished'] != "true" %}
+  {% set pageName = "Review your form before publishing" %}
+{% else %}
+  {% set pageName = "Published form details" %}
+{% endif %}
+
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+  {{ pageName }} – {{ serviceName }}
 {% endblock %}
 
 {% block containerStart %}
-  {{ govukBackLink({
-    text: "Back",
-    href: "javascript:window.history.back()"
-  }) }}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
 {% endblock %}
 
 {% block content %}
 
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      {{ pageName }}
+    </h1>
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    {% if data['formPublished'] == "true" %}
+      {% set formAction = "/iteration-01/unpublish-form" %}
+    {% else %}
+      {% set formAction = "/iteration-01/published-form" %}
+    {% endif %}
 
+    {% if displayBanner %}
+      {{ govukNotificationBanner({
+        type: "success",
+        text: bannerMessage
+      }) }}
+    {% endif %}
+    
+    <form class="form" action="{{ formAction }}" method="post">
 
-      <h1 class="govuk-heading-l">
-       Review your form before publishing
-      </h1>
-
-      <form class="form" action="/iteration-01/published-form" method="post">
-
-        <input type="hidden" name="formCreated" value="true">
-
+      {% set publishedSummaryListItems = [
+        {
+          key: { text: "Published Date" },
+          value: { text: data['formPublishedDate'] }
+        },
+        {
+          key: { text: "Published by" },
+          value: { text: data['lpaUserEmail'] }
+        }
+      ] %}
+      
       {% set summaryListItems = [
         {
           key: { text: "Call for sites questions" },
@@ -40,44 +65,117 @@
           value: { text: data['addQuestion'] if data['addQuestion'] else "Not provided" },
           actions: { items: [{ href: "/iteration-01/add-a-question", text: "Change", visuallyHiddenText: "Add question" }] }
         }
-      ] %}
-      
-      {% if data['addQuestion'] == 'Yes' %}
+        ] %}
+
+        {% if data['formPublished'] == "true" %}
+          {% set summaryListItems = publishedSummaryListItems.concat(summaryListItems) %}
+        {% endif %}
+        
+        {% if data['addQuestion'] == 'Yes' %}
+          {% set summaryListItems = (summaryListItems.push({
+            key: { text: "Local constraint question" },
+            value: { text: data['localQuestion'] if data['localQuestion'] else "Not provided" },
+            actions: { items: [{ href: "/iteration-01/enter-question", text: "Change", visuallyHiddenText: "Local constraint question" }] }
+          }), summaryListItems) %}
+        {% endif %}
+
         {% set summaryListItems = (summaryListItems.push({
-          key: { text: "Local constraint question" },
-          value: { text: data['enterQuestion'] if data['enterQuestion'] else "Not provided" },
-          actions: { items: [{ href: "/iteration-01/enter-question", text: "Change", visuallyHiddenText: "Local constraint question" }] }
+          key: { text: "Local authority logo" },
+          value: { text: data['logoUpload'] if data['logoUpload'] else "Not provided" },
+          actions: { items: [{ href: "/iteration-01/upload-logo", text: "Change", visuallyHiddenText: "Local authority logo" }] }
         }), summaryListItems) %}
-      {% endif %}
-      
-      {{ govukSummaryList({
-        rows: summaryListItems
-      }) }}
 
- <h2 class="govuk-heading-m">
-       Preview form
-      </h2>
+        {% if data['headerColour'] %}
+          {% set headerColourHTML %}
+            <div class="headerColourPreview-wrapper">
+              {{ data['headerColour'] }}
 
- {% from "govuk/components/input/macro.njk" import govukInput %}
+              <div class="headerColourSwatch" style="background-color: {{ data['headerColour'] }};"></div>
+            </div>
+          {% endset %}
+        {% else %}
+          {% set headerColourHTML %}
+            Not provided
+          {% endset %}
+        {% endif %}
 
-{{ govukInput({
-  classes: "govuk-input--width- app-grey-input",
-  id: "form-link",
-  name: "formLink",
-  value: "https://planhampshireboroughcouncilcallforsitesform",
-  attributes: {
-    readonly: true
-  }
-}) }}
+        {% set summaryListItems = (summaryListItems.push({
+          key: { text: "Header colour" },
+          value: { html: headerColourHTML },
+          actions: { items: [{ href: "/iteration-01/choose-header-colour", text: "Change", visuallyHiddenText: "Header colour" }] }
+        }), summaryListItems) %}
 
-<p><a href="https://blank" target="_blank">Open preview (opens in new tab)</a></p>
-     
-
-{{ govukButton({
-          text: "Publish"
+        {# remove actions if form is published #}
+        {% if data['formPublished'] == "true" %}
+          {% for row in summaryListItems %}
+            {% set row = row|removeAttribute('actions') %}
+          {% endfor %}
+        {% endif %}
+        
+        {{ govukSummaryList({
+          rows: summaryListItems
         }) }}
-      
+
+        <h2 class="govuk-heading-m">
+          {{ "Preview form" if data['formPublished'] != "true"  else "Published form" }}
+        </h2>
+
+        {% if data['formPublished'] == "true" %}
+          {% set formPreviewLink = "https://planhampshireboroughcouncil.preview.submit-site.communities.gov.uk" %}
+        {% else %}
+          {% set formPreviewLink = "https://planhampshireboroughcouncil.submit-site.communities.gov.uk" %}
+        {% endif %}
+        
+        {{ govukInput({
+          classes: "app-url-input--readonly",
+          id: "form-preview-link",
+          name: "formLink",
+          value: formPreviewLink,
+          attributes: {
+            readonly: true
+          }
+        }) }}
+
+        {{ govukButton({
+          text: "Copy link",
+          type: "button",
+          id: "copy-link-button",
+          classes: "app-copy-button",
+          attributes: {
+            "data-copy-target": "form-preview-link"
+          }
+        }) }}
+
+        {% if data['formPublished'] != "true" %}
+          
+          <p><a href="about:blank" target="_blank">Open preview (opens in new tab)</a></p>
+          
+          <input type="hidden" name="formPublishedDate" value="{{ "today" | govukDate }}">
+          
+          {{ govukButton({
+            text: "Publish"
+          }) }}
+        {% else %}
+          <h2 class="govuk-heading-m">Edit or unpublish your form</h2>
+
+          <p>Unpublish your form:</p>
+
+          <ul class="govuk-list govuk-list--bullet">
+            <li>to make changes to it</li>
+            <li>when your call for sites has ended</li>
+          </ul>
+
+          {{ govukButton({
+            text: "Unpublish",
+            href: "/iteration-01/unpublish-form"
+          }) }}
+        {% endif %}
+
+        <p><a href="/iteration-01/dashboard">Return to dashboard</a></p>
+        
+      </form>
     </div>
   </div>
-
-{% endblock %}
+  
+  {% endblock %}
+  

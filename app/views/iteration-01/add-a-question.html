@@ -3,60 +3,53 @@
 {% set mainNavActive = "manage-form" %}
 {% set showSiteSubmissionsNav = true %}
 
+{% set pageName="Do you need to add a question about local constraints?" %}
+
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+{{ pageName }} – {{ serviceName }}
 {% endblock %}
 
 {% block containerStart %}
-  {{ govukBackLink({
-    text: "Back",
-    href: "javascript:window.history.back()"
-  }) }}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
 {% endblock %}
 
 {% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form class="form" action="/iteration-01/constraints-question-controller" method="post">
+      
+      {{ govukRadios({
+        name: "addQuestion",
+        value: data['addQuestion'],
+        fieldset: {
+          legend: {
+            text: pageName,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        items: [
+          {
+            value: "Yes",
+            text: "Yes"
+          },
+          {
+            value: "No",
+            text: "No"
+          }
+        ]
+      }) }}
 
-
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-
-
-      <form class="form" action="/iteration-01/constraints-question-controller" method="post">
-
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
-
-{{ govukRadios({
-  name: "addQuestion",
-  value: data['addQuestion'],
-  fieldset: {
-    legend: {
-      text: "Do you need to add a question about local constraints?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  items: [
-    {
-      value: "Yes",
-      text: "Yes"
-    },
-    {
-      value: "No",
-      text: "No"
-    }
+      {{ govukButton({
+        text: "Save and continue"
+      }) }}
+      
+    </form>
     
-  ]
-}) }}
-
-      
-
-        {{ govukButton({
-          text: "Save and continue"
-        }) }}
-
-        </form>
-      
-    </div>
   </div>
+</div>
 
 {% endblock %}

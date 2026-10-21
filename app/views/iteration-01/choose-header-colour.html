@@ -1,0 +1,53 @@
+{% extends "layouts/main.html" %}
+
+{% set mainNavActive = "manage-form" %}
+{% set showSiteSubmissionsNav = true %}
+
+{% set pageName = "Choose a header colour" %}
+
+{% block pageTitle %}
+  {{ pageName }} – {{ serviceName }}
+{% endblock %}
+
+{% block containerStart %}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript:window.history.back()"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    <form class="form" action="/iteration-01/review-form" method="post">
+      <h1 class="govuk-heading-l">{{ pageName }}</h1>
+
+      <p>This colour will be used for the header of your call for sites form.</p>
+
+      <p>If you do not choose a colour, the default black header colours will be used.</p>
+
+      {{ govukInput({
+        label: {
+          text: "Enter a hex value (optional)",
+          classes: "govuk-label--m",
+          isPageHeading: false
+        },
+        hint: {
+          text: "We recommend using your local authority’s brand colour. For example, #005EA5."
+        },
+        name: "headerColour",
+        value: data['headerColour'] if data['headerColour'] else "",
+        classes: "govuk-input--width-10"
+      }) }}
+
+      {{ govukButton({
+        text: "Save and continue"
+      }) }}
+    </form>
+    
+  </div>
+</div>
+
+{% endblock %}

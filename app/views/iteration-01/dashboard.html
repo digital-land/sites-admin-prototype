@@ -1,34 +1,57 @@
 {% extends "layouts/main.html" %}
 
-{% set pageName="Home" %}
+{% set pageName="Dashboard" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - {{ serviceName }}
+{% endblock %}
+
+{% set mainNavActive = "dashboard" %}
+{% set showSiteSubmissionsNav = false %}
 
 {% block content %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
-      Dashboard
+      {{ pageName }}
     </h1>
   </div>
 </div>
 
+
 <div class="govuk-grid-row dashboard-cards">
+
+  {% if data['formCreated'] == "true" %}
+  <!-- Show the view site submissions card if the form has been created -->
   <div class="govuk-grid-column-one-third">
-    <a class="app-card-link" href="/iteration-01/view-questions">
-      <div class="app-card">
-        <h3 class="govuk-heading-m">Create a Call for sites form</h3>
-        <p>Review the questions, add a local constraints question and create a link to share the form. </p>
-      </div>
-    </a>
+    <div class="app-card">
+      <h3 class="govuk-heading-m"><a class="app-card-link" href="/iteration-01/site-submissions">View site submissions</a></h3>
+      <p>View and download new site submissions.</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="govuk-grid-column-one-third">
+    <!-- Show the manage form card if the form has been created, otherwise show the create a call for sites form card -->
+    {% if data['formCreated'] != "true" %}
+    <div class="app-card">
+      <h3 class="govuk-heading-m"><a class="app-card-link" href="/iteration-01/view-questions">Create a Call for sites form</a></h3>
+      <p>Review the questions, add a local constraints question and create a link to share the form. </p>
+    </div>
+    {% else %}
+    <div class="app-card">
+      <h3 class="govuk-heading-m"><a class="app-card-link" href="/iteration-01/review-form">Manage form</a></h3>
+      <p>Review the questions, edit the local constraints question or unpublish form.</p>
+    </div>
+    {% endif %}
   </div>
 
   <div class="govuk-grid-column-one-third">
-    <a class="app-card-link" href="/iteration-01/manage-editors">
-      <div class="app-card">
-        <h3 class="govuk-heading-m">Manage access</h3>
-        <p>Invite team members and manage their access to the form and submissions.</p>
-      </div>
-    </a>
+    <div class="app-card">
+      <h3 class="govuk-heading-m"><a class="app-card-link" href="/iteration-01/manage-editors">Manage access</a></h3>
+      <p>Invite team members and manage their access to the form and submissions.</p>
+    </div>
   </div>
 </div>
 

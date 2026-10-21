@@ -1,5 +1,5 @@
 module.exports = {
-
-  formCreated: false
-
+  formCreated: false,
+  lpaUserEmail: 'john.doe@planhamshireboroughcouncil.gov.uk',
+  lpaName: 'Planhamshire Borough Council'
 }
