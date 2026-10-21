@@ -1,17 +1,18 @@
 {% extends "layouts/main.html" %}
+{% from "macros/team-member-access.html" import teamMemberAccess %}
 
-{% set serviceUrl = '/dashboard-published-form' if data['formCreated'] else '/dashboard' %}
+{% set pageName = "Add a new team member" %}
 {% set mainNavActive = "manage-editors" %}
 {% set showSiteSubmissionsNav = true %}
 
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+  {{ pageName }} – {{ serviceName }}
 {% endblock %}
 
 {% block containerStart %}
   {{ govukBackLink({
     text: "Back",
-    href: "javascript:window.history.back()"
+    href: "/iteration-01/manage-editors"
   }) }}
 {% endblock %}
 
@@ -21,38 +22,34 @@
     <div class="govuk-grid-column-two-thirds">
 
       <h1 class="govuk-heading-l">
-        Invite a new team member
+        {{ pageName }}
       </h1>
 
-      <form class="form" action="/iteration-01/manage-editors-invited" method="post">
-
-
-         <p class="govuk-body">You can invite someone to create forms and download site submissions. They must:</p>
+      <p class="govuk-body">You can add team members to create forms and download site submissions. They must:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>be from the same organisation as you</li>
-        <li>have a council email address</li>
+        <li>have a local authority email address</li>
       </ul>
 
-      {% from "govuk/components/input/macro.njk" import govukInput %}
-
-      {{ govukInput({
-        label: {
-          text: "Enter the email address of the person you want to invite",
-          classes: "govuk-label--m",
-          isPageHeading: true
-        },
-        id: "email-address",
-        name: "emailAddress",
-        classes: "govuk-!-width-two-thirds",
-        value: data['emailAddress'] if data['emailAddress'] else ""
-      }) }}
-
-
-        {{ govukButton({
-          text: "Send invite"
+      <form class="form" action="/iteration-01/invite-new-editor" method="post" novalidate>
+        {{ govukInput({
+          label: {
+            text: "Enter the email address of the person you want to add",
+            classes: "govuk-label--m"
+          },
+          id: "email-address",
+          name: "emailAddress",
+          type: "email",
+          autocomplete: "email",
+          spellcheck: false,
+          value: data['emailAddress']
         }) }}
 
+        {{ teamMemberAccess("accessLevel", "Select their access level", data['accessLevel']) }}
 
+        {{ govukButton({
+          text: "Add team member"
+        }) }}
 
       </form>
 

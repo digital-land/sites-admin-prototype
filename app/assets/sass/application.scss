@@ -72,6 +72,10 @@
   font-weight: 300;
 }
 
+.app-team-member-email {
+  overflow-wrap: anywhere;
+}
+
 .headerColourPreview-wrapper {
   display: flex;
   align-items: center;
@@ -119,4 +123,3 @@
     box-shadow: none;
   }
 }
-

@@ -1,0 +1,45 @@
+{% macro teamMemberAccess(name, legend, value, allowRemoval=false) %}
+  {% set items = [
+    {
+      value: "Admin",
+      text: "Admin",
+      hint: {
+        text: "Able to create and publish forms, view site submissions, and manage team member access"
+      }
+    },
+    {
+      value: "Editor",
+      text: "Editor",
+      hint: {
+        text: "Able to create forms and view site submissions"
+      }
+    },
+    {
+      value: "Viewer",
+      text: "Viewer",
+      hint: {
+        text: "Able to view site submissions"
+      }
+    }
+  ] %}
+
+  {% if allowRemoval %}
+    {% set items = items.concat([
+      { divider: "or" },
+      { value: "remove", text: "Remove team member" }
+    ]) %}
+  {% endif %}
+
+  {% from "govuk/components/radios/macro.njk" import govukRadios %}
+  {{ govukRadios({
+    name: name,
+    value: value,
+    fieldset: {
+      legend: {
+        text: legend,
+        classes: "govuk-fieldset__legend--m"
+      }
+    },
+    items: items
+  }) }}
+{% endmacro %}
