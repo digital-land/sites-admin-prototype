@@ -1,326 +1,45 @@
 {% extends "layouts/main.html" %}
 
+{% set pageName = submission.location %}
+{% set mainNavActive = "site-submissions" %}
+
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
+  {{ pageName }} – {{ serviceName }}
 {% endblock %}
 
 {% block containerStart %}
   {{ govukBackLink({
     text: "Back",
-    href: "javascript:window.history.back()"
+    href: returnUrl
   }) }}
 {% endblock %}
 
 {% block content %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-l view-submission-heading">{{ pageName }}</h1>
+      <p class="govuk-body"><strong>Reference number: {{ submission.reference }}</strong></p>
 
-    
-      <h1 class="govuk-heading-l view-submission-heading">
-        72 Guild Street, London 
-      </h1>
+      <p class="govuk-body">The site boundary map will be added in the next iteration of this prototype.</p>
 
-      <h3 class="govuk-heading-s">
-        Reference number: XXXX 
-      </h3>
-     
+      {% for section in submissionSections %}
+        <h2 class="govuk-heading-m">{{ section.title }}</h2>
+        {% set rows = [] %}
+        {% for answer in section.answers %}
+          {% set rows = (rows.push({
+            key: { text: answer[0], classes: "govuk-!-width-one-half" },
+            value: { text: answer[1], classes: "govuk-!-width-one-half" }
+          }), rows) %}
+        {% endfor %}
+        {{ govukSummaryList({
+          classes: "view-submission-summary-list app-submissions-table",
+          rows: rows
+        }) }}
+      {% endfor %}
 
-      <form class="form" action="/path/of/next/page" method="post">
-
-
-      <h2 class="govuk-heading-m">
-        Submitted on behalf of someone else
-      </h2>
-
-  {% from "govuk/components/table/macro.njk" import govukTable %}
-
-{{ govukTable({
-  
-  
-  rows: [
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Submitted on behalf of someone else"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Type of person"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Title (optional)"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "First name"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Last name"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Organisation (optional)"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Telephone number"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Email address"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ]   
-]
-  }) }}
-
-
-
-      <h2 class="govuk-heading-m">
-        Your details
-      </h2>
-
-  {% from "govuk/components/table/macro.njk" import govukTable %}
-
-{{ govukTable({
-  
-  
-  rows: [
-    
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Title (optional)"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "First name"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Last name"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Organisation (optional)"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Telephone number"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Email address"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ]   
-]
-  }) }}
-
-
-   <h2 class="govuk-heading-m">
-        Site location and boundary
-      </h2>
-
-  {% from "govuk/components/table/macro.njk" import govukTable %}
-
-{{ govukTable({
-  
-  
-  rows: [
-    
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Site boundary selection method"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Site location"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ]
-
-    
-    
-]
-  }) }}
-
-
-  <h2 class="govuk-heading-m">
-        Constraints
-      </h2>
-
-  {% from "govuk/components/table/macro.njk" import govukTable %}
-
-{{ govukTable({
-  
-  
-  rows: [
-    
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Conservation mitigation"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-    [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Conservation mitigation details"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-     [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Aware of other constraints"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ],
-
-     [
-      {
-        classes: "govuk-!-width-one-half",
-        text: "Other constraints details"
-      },
-      {
-        classes: "govuk-!-width-one-half",
-        text: "XXXX"
-      }
-    ]
-
-    
-    
-]
-  }) }}
-
-
-
-
-
-
-
-       
-
-
-      </form>
-
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ returnUrl }}">Return to site submissions</a>
+      </p>
     </div>
   </div>
-
 {% endblock %}

@@ -1,9 +1,10 @@
 {% extends "layouts/main.html" %}
+{% from "macros/submission-badge.html" import submissionBadge %}
 
 {% set pageName="Dashboard" %}
 
 {% block pageTitle %}
-  {{ pageTitle }} - {{ serviceName }}
+  {{ pageName }} – {{ serviceName }}
 {% endblock %}
 
 {% set mainNavActive = "dashboard" %}
@@ -26,8 +27,8 @@
   <!-- Show the view site submissions card if the form has been created -->
   <div class="govuk-grid-column-one-third">
     <div class="app-card">
-      <h3 class="govuk-heading-m"><a class="app-card-link" href="/iteration-01/site-submissions">View site submissions</a></h3>
-      <p>View and download new site submissions.</p>
+      <h3 class="govuk-heading-m"><a class="app-card-link" href="/iteration-01/site-submissions">View site submissions</a> {{ submissionBadge(newSubmissionCount) }}</h3>
+      <p>View and download site submissions.</p>
     </div>
   </div>
   {% endif %}
@@ -56,4 +57,3 @@
 </div>
 
 {% endblock %}
-

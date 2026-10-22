@@ -1,57 +1,60 @@
 {% extends "layouts/main.html" %}
+{% from "macros/submissions-navigation.html" import submissionsNavigation %}
 
-{% set serviceUrl = "/dashboard-published-form" %}
+{% set pageName = "View site submissions" %}
 {% set mainNavActive = "site-submissions" %}
-{% set showSiteSubmissionsNav = true %}
-{% set formNavHref = "/review-published-form" %}
+{% set sectionName = "Downloaded submissions" if downloaded else "New submissions" %}
+{% set scope = "all" if downloaded else "new" %}
 
 {% block pageTitle %}
-  Question page template – {{ serviceName }} – GOV.UK Prototype Kit
-{% endblock %}
-
-{% block containerStart %}
-  {{ govukBackLink({
-    text: "Back",
-    href: "javascript:window.history.back()"
-  }) }}
+  {{ sectionName }} – {{ pageName }} – {{ serviceName }}
 {% endblock %}
 
 {% block content %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-l">{{ pageName }}</h1>
 
-      <h1 class="govuk-heading-l">
-        View site submissions
-      </h1>
+      {{ submissionsNavigation(downloaded, newSubmissionCount) }}
 
-        {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+      <h2 class="govuk-heading-m">{{ sectionName }}</h2>
 
-{{ govukServiceNavigation({
-  serviceUrl: serviceUrl,
-  navigation: [
-    {
-      href: "#",
-      text: "New submissions",
-      active: true
-    },
-    {
-      href: "/iteration-01/downloaded-sites",
-      text: "Downloaded submissions"
-    }
-    
-  ]
-}) }}
+      {% if submissions.length %}
+        {% set rows = [] %}
+        {% for submission in submissions %}
+          {% set locationLink %}
+            <a class="govuk-link" href="/iteration-01/view-submission/{{ submission.reference }}">{{ submission.location }}</a>
+          {% endset %}
+          {% set rows = (rows.push([
+            { html: locationLink },
+            { text: submission.received },
+            { text: submission.reference },
+            { text: submission.submittedBy }
+          ]), rows) %}
+        {% endfor %}
+        {{ govukTable({
+          classes: "app-submissions-table",
+          head: [
+            { text: "Site location" },
+            { text: "Date received" },
+            { text: "Reference number" },
+            { text: "Submitted by" }
+          ],
+          rows: rows
+        }) }}
+      {% else %}
+        <p class="govuk-body">You have no {{ "downloaded" if downloaded else "new" }} site submissions.</p>
+      {% endif %}
 
-<p></p>
-
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-
-{% call govukInsetText() %}
-  You have no new site submissions.
-{% endcall %}
-
+      {% if submissions.length or (downloaded and newSubmissionCount) %}
+        <h2 class="govuk-heading-m">Download all {{ "site" if downloaded else "new site" }} submissions</h2>
+        <p class="govuk-body">
+          <a class="govuk-link" href="/iteration-01/download-submissions/{{ scope }}/csv">Download a CSV of all {{ "submissions" if downloaded else "new submissions" }}</a>
+        </p>
+        <p class="govuk-body">
+          <a class="govuk-link" href="/iteration-01/download-submissions/{{ scope }}/geojson">Download a GeoJSON of all {{ "submissions" if downloaded else "new submissions" }}</a>
+        </p>
+      {% endif %}
     </div>
   </div>
-
 {% endblock %}

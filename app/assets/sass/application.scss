@@ -76,6 +76,33 @@
   overflow-wrap: anywhere;
 }
 
+.app-notification-badge {
+  @include govuk-font($size: 16);
+  display: inline-block;
+  background-color: govuk-colour("red");
+  border-radius: 10%;
+  color: govuk-colour("white");
+  text-align: center;
+  padding: 2px 6px;
+  margin-left: govuk-spacing(1);
+  vertical-align: middle;
+}
+
+.app-submissions-navigation {
+  background-color: govuk-colour("white");
+  border-top: 1px solid govuk-functional-colour("border");
+  @include govuk-responsive-margin(6, "bottom");
+
+  .govuk-width-container {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.app-submissions-table {
+  overflow-wrap: anywhere;
+}
+
 .headerColourPreview-wrapper {
   display: flex;
   align-items: center;

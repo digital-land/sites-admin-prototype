@@ -1,0 +1,39 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName = "File ready for download" if download.complete else "Processing download file" %}
+{% set mainNavActive = "site-submissions" %}
+
+{% block pageTitle %}
+  {{ pageName }} – {{ serviceName }}
+{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  {% if not download.complete %}
+    <meta http-equiv="refresh" content="2">
+  {% endif %}
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    text: "Back",
+    href: returnUrl
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ pageName }}</h1>
+      {% if download.complete %}
+        <p class="govuk-body">Your {{ download.format }} file is ready to download.</p>
+        <p class="govuk-body">Download all {{ "new submissions" if download.scope == "new" else "submissions" }} ({{ download.format }})</p>
+        <p class="govuk-body">This prototype simulates processing only. File downloads are not yet available.</p>
+        <p class="govuk-body"><a class="govuk-link" href="/iteration-01/dashboard">Return to dashboard</a></p>
+      {% else %}
+        <p class="govuk-body">Your {{ download.format }} file is being processed.</p>
+        <p class="govuk-body"><a class="govuk-link" href="">Check if your file is ready</a></p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

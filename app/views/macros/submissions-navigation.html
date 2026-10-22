@@ -1,0 +1,26 @@
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+{% from "macros/submission-badge.html" import submissionBadge %}
+
+{% macro submissionsNavigation(downloaded, count) %}
+  {% set newSubmissionsLabel %}
+    New submissions {{ submissionBadge(count) }}
+  {% endset %}
+  {{ govukServiceNavigation({
+    classes: "app-submissions-navigation",
+    navigationId: "submissions-navigation",
+    navigationLabel: "Submission lists",
+    collapseNavigationOnMobile: false,
+    navigation: [
+      {
+        href: "/iteration-01/site-submissions",
+        html: newSubmissionsLabel,
+        current: not downloaded
+      },
+      {
+        href: "/iteration-01/downloaded-sites",
+        text: "Downloaded submissions",
+        current: downloaded
+      }
+    ]
+  }) }}
+{% endmacro %}
