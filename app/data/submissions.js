@@ -1,3 +1,5 @@
+const siteBoundaries = require('./site-boundaries')
+
 const submissions = [
   {
     location: '72 Guild Street, London',
@@ -113,5 +115,17 @@ const sections = [
 
 module.exports = {
   createSubmissions: () => submissions.map(submission => ({ ...submission })),
-  sections
+  sections,
+  createBoundary(reference) {
+    const boundary = siteBoundaries[reference]
+    if (!boundary) return null
+    return {
+      type: 'Feature',
+      properties: { reference, name: boundary.name, source: boundary.source },
+      geometry: {
+        type: 'Polygon',
+        coordinates: boundary.coordinates
+      }
+    }
+  }
 }

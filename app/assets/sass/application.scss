@@ -52,11 +52,6 @@
   margin-bottom: 10px;
 }
 
-.view-submission-summary-list .govuk-summary-list__key,
-.view-submission-summary-list .govuk-summary-list__value {
-  font-weight: 400;
-}
-
 .form .govuk-button {
   width: auto !important;
   display: inline-block !important;
@@ -101,6 +96,11 @@
 
 .app-submissions-table {
   overflow-wrap: anywhere;
+}
+
+.app-submission-map {
+  --map-background-colour: #{govuk-colour("black", $variant: "tint-95")};
+  @include govuk-responsive-margin(6, "bottom");
 }
 
 .headerColourPreview-wrapper {

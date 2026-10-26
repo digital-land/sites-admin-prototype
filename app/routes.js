@@ -3,9 +3,11 @@
 // https://prototype-kit.service.gov.uk/docs/create-routes
 //
 
+require('dotenv').config({ quiet: true })
+
 const govukPrototypeKit = require('govuk-prototype-kit')
 const { randomUUID } = require('node:crypto')
-const { createSubmissions, sections: submissionSections } = require('./data/submissions')
+const { createSubmissions, createBoundary, sections: submissionSections } = require('./data/submissions')
 const router = govukPrototypeKit.requests.setupRouter()
 
 // Add your routes here
@@ -149,8 +151,19 @@ router.get('/iteration-01/view-submission/:reference', (req, res) => {
   res.render('iteration-01/view-submission', {
     submission,
     submissionSections,
+    boundary: createBoundary(submission.reference),
+    osMapsApiKey: process.env.ORDNANCE_SURVEY_API_KEY,
     returnUrl: submission.downloaded ? '/iteration-01/downloaded-sites' : '/iteration-01/site-submissions'
   })
+})
+
+router.get('/iteration-01/submission-boundary/:reference', (req, res) => {
+  const submission = req.session.data.submissions.find(submission => submission.reference === req.params.reference)
+  const boundary = submission && createBoundary(submission.reference)
+  if (!boundary) {
+    return res.status(404).send('Submission boundary not found.')
+  }
+  res.json({ type: 'FeatureCollection', features: [boundary] })
 })
 
 router.get('/iteration-01/view-submission', (req, res) => {
