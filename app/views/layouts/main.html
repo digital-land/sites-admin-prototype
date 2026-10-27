@@ -3,14 +3,12 @@ For guidance on how to use layouts see:
 https://prototype-kit.service.gov.uk/docs/how-to-use-layouts
 #}
 
-{% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
-
+{% extends "govuk-prototype-kit/layouts/unbranded.njk" %}
 
 {% block header %}
-  {{ govukHeader({
-    homepageUrl: "/",
-    serviceName: serviceName if not useServiceNavigation,
-    serviceUrl: serviceUrl if not useServiceNavigation,
+  {{ govukGenericHeader({
+    url: "/iteration-01/dashboard",
+    logoHtml: serviceName,
     containerClasses: containerClasses
   }) }}
 
@@ -59,30 +57,36 @@ https://prototype-kit.service.gov.uk/docs/how-to-use-layouts
 
     {% set organisationNameHTML %}
     <div class="app-main-navigation__organisation-name">
-        Planhamshire Borough Council
+        {{ data['lpaName'] }}
     </div>
     {% endset %}
 
     {{ govukServiceNavigation({
-      serviceName: serviceName,
       serviceUrl: '/iteration-01/dashboard',
       classes: "app-main-navigation",
       containerClasses: "govuk-width-container wide-container",
       navigation: navItems,
       slots: {
         navigationEnd: navigationEnd,
-        end: organisationNameHTML
+        start: organisationNameHTML
       }
     }) }}
   {% endif %}
 {% endblock %}
 
+{% block footer %}
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
 {% if (GOVUKPrototypeKit.isDevelopment) %}
   {% set footerItems = [
     {
+      href: "/",
+      text: "Prototype home"
+    },
+    {
       href: "/manage-prototype",
       text: "Manage your prototype"
-    }, {
+    },
+    {
       href: "/manage-prototype/clear-data",
       text: "Clear data"
     }
@@ -90,30 +94,28 @@ https://prototype-kit.service.gov.uk/docs/how-to-use-layouts
 {% else %}
   {% set footerItems = [
     {
+      href: "/",
+      text: "Prototype home"
+    },
+    {
       href: "/manage-prototype/clear-data",
       text: "Clear data"
     }
   ] %}
 {% endif %}
 
-{# 
-  Because the macro is used inside `set` rather than a `block`
-  `govukFooter` needs to be explicitly imported
-#}
-{% from 'govuk/components/footer/macro.njk' import govukFooter %}
-{% set govukFooterHtml %}
   {{ govukFooter({
     meta: {
       items: footerItems,
       visuallyHiddenTitle: "Footer links"
     },
-    containerClasses: containerClasses
+    classes: "app-unbranded-footer"
   }) }}
-{% endset %}
+{% endblock %}
 
-{# Override only the GOV.UK Footer component for GOV.UK Frontend >=6.0.0 #}
-{% block govukFooter %}{{govukFooterHtml | safe}}{% endblock %}
-
-{% block footer %}
-  {{ super() }}
+{% block bodyEnd %}
+  {% block scripts %}
+    {% include "govuk-prototype-kit/includes/scripts.njk" %}
+    {% block pageScripts %}{% endblock %}
+  {% endblock %}
 {% endblock %}

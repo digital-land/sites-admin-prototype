@@ -4,9 +4,9 @@
 {% set showSiteSubmissionsNav = true %}
 
 {% if data['formPublished'] != "true" %}
-  {% set pageName = "Review your form before publishing" %}
+  {% set pageName = "Check your answers before creating the form" %}
 {% else %}
-  {% set pageName = "Published form details" %}
+  {% set pageName = "Form details" %}
 {% endif %}
 
 {% block pageTitle %}
@@ -45,11 +45,11 @@
 
       {% set publishedSummaryListItems = [
         {
-          key: { text: "Published Date" },
+          key: { text: "Created" },
           value: { text: data['formPublishedDate'] }
         },
         {
-          key: { text: "Published by" },
+          key: { text: "Created by" },
           value: { text: data['lpaUserEmail'] }
         }
       ] %}
@@ -127,16 +127,24 @@
         }) }}
 
         <h2 class="govuk-heading-m">
-          {{ "Preview form" if data['formPublished'] != "true"  else "Published form" }}
+          {{ "Preview form" if data['formPublished'] != "true"  else "View the form" }}
         </h2>
 
-        {% if data['formPublished'] == "true" %}
-          {% set formPreviewLink = "https://planhampshireboroughcouncil.preview.submit-site.communities.gov.uk" %}
+        {% if data['formPublished'] != "true" %}
+          <p><a href="about:blank" target="_blank">Open preview (opens in new tab)</a></p>
         {% else %}
-          {% set formPreviewLink = "https://planhampshireboroughcouncil.submit-site.communities.gov.uk" %}
+          <p><a href="about:blank" target="_blank">View published form (opens in new tab)</a></p>
         {% endif %}
-        
-        {{ govukInput({
+
+        {% if data['formPublished'] == "true" %}
+          {% set formPreviewLink = "https://planhampshireboroughcouncil.submit-site.communities.gov.uk" %}
+
+          {{ govukInput({
+          label: {
+            text: "Share the link with someone else",
+            classes: "govuk-label--s",
+            isPageHeading: false
+          },
           classes: "app-url-input--readonly",
           id: "form-preview-link",
           name: "formLink",
@@ -145,6 +153,28 @@
             readonly: true
           }
         }) }}
+        {% else %}
+          {% set formPreviewLink = "https://planhampshireboroughcouncil.preview.submit-site.communities.gov.uk" %}
+
+          <h3 class="govuk-heading-s">Share a preview link with someone else</h3>
+
+          <p class="govuk-body">Anyone with the preview link can see the content of the form. You are responsible for who you share the link with.</p>
+
+          {{ govukInput({
+          label: {
+            text: "Preview link",
+            classes: "govuk-label--s",
+            isPageHeading: false
+          },
+          classes: "app-url-input--readonly",
+          id: "form-preview-link",
+          name: "formLink",
+          value: formPreviewLink,
+          attributes: {
+            readonly: true
+          }
+        }) }}
+        {% endif %}
 
         {{ govukButton({
           text: "Copy link",
@@ -158,27 +188,24 @@
 
         {% if data['formPublished'] != "true" %}
           
-          <p><a href="about:blank" target="_blank">Open preview (opens in new tab)</a></p>
-          
-          <input type="hidden" name="formPublishedDate" value="{{ "today" | govukDate }}">
-          
-          {{ govukButton({
-            text: "Publish"
-          }) }}
+          <div class="govuk-button-group">
+            <input type="hidden" name="formPublishedDate" value="{{ "today" | govukDate }}">
+            
+            {{ govukButton({
+              text: "Create the form"
+            }) }}
+          </div>
         {% else %}
-          <h2 class="govuk-heading-m">Edit or unpublish your form</h2>
+          <h2 class="govuk-heading-m">Unpublish the form</h2>
 
-          <p>Unpublish your form:</p>
+          <p>You can do this:</p>
 
           <ul class="govuk-list govuk-list--bullet">
             <li>to make changes to it</li>
             <li>when your call for sites has ended</li>
           </ul>
 
-          {{ govukButton({
-            text: "Unpublish",
-            href: "/iteration-01/unpublish-form"
-          }) }}
+            <p class="govuk-body"><a href="/iteration-01/unpublish-form">Unpublish the form</a></p>
         {% endif %}
 
         <p><a href="/iteration-01/dashboard">Return to dashboard</a></p>

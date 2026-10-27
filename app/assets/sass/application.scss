@@ -21,8 +21,8 @@
 
 
 .app-main-navigation .app-main-navigation__organisation-name {
-  @include govuk-font($size: 16);
-  @include govuk-responsive-padding(3, "bottom");
+  @include govuk-font($size: 19);
+  @include govuk-responsive-margin(3, "top");
 }
 
 .app-main-navigation .app-main-navigation__item--sign-out {
@@ -149,6 +149,19 @@
     margin-top: 2px;
     box-shadow: none;
   }
+}
+
+.app-unbranded-footer {
+  background-color: govuk-colour("black", $variant: "tint-95");
+  border-top: 8px solid govuk-functional-colour("border");
+}
+
+.app-unbranded-footer .govuk-footer__crown {
+  display: none;
+}
+
+.app-unbranded-footer .govuk-footer__copyright-logo {
+  display: none;
 }
 
 .app-logo-preview {

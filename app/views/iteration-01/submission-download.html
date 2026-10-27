@@ -27,8 +27,8 @@
       <h1 class="govuk-heading-l">{{ pageName }}</h1>
       {% if download.complete %}
         <p class="govuk-body">Your {{ download.format }} file is ready to download.</p>
-        <p class="govuk-body">Download all {{ "new submissions" if download.scope == "new" else "submissions" }} ({{ download.format }})</p>
-        <p class="govuk-body">This prototype simulates processing only. File downloads are not yet available.</p>
+        <p class="govuk-body"><a href="#">Download all {{ "new submissions" if download.scope == "new" else "submissions" }} ({{ download.format }}, 240KB)</a></p>
+
         <p class="govuk-body"><a class="govuk-link" href="/iteration-01/dashboard">Return to dashboard</a></p>
       {% else %}
         <p class="govuk-body">Your {{ download.format }} file is being processed.</p>

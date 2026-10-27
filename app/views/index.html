@@ -94,3 +94,43 @@
 </div>
 
 {% endblock %}
+
+{% block footer %}
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+
+{% if (GOVUKPrototypeKit.isDevelopment) %}
+  {% set footerItems = [
+    {
+      href: "/",
+      text: "Prototype home"
+    },
+    {
+      href: "/manage-prototype",
+      text: "Manage your prototype"
+    },
+    {
+      href: "/manage-prototype/clear-data",
+      text: "Clear data"
+    }
+  ] %}
+{% else %}
+  {% set footerItems = [
+    {
+      href: "/",
+      text: "Prototype home"
+    },
+    {
+      href: "/manage-prototype/clear-data",
+      text: "Clear data"
+    }
+  ] %}
+{% endif %}
+
+  {{ govukFooter({
+    meta: {
+      items: footerItems,
+      visuallyHiddenTitle: "Footer links"
+    },
+    classes: "app-unbranded-footer"
+  }) }}
+{% endblock %}
