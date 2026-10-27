@@ -7,8 +7,13 @@ require('dotenv').config({ quiet: true })
 
 const govukPrototypeKit = require('govuk-prototype-kit')
 const { randomUUID } = require('node:crypto')
+const multer = require('multer')
 const { createSubmissions, createBoundary, sections: submissionSections } = require('./data/submissions')
 const router = govukPrototypeKit.requests.setupRouter()
+const logoUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }
+})
 
 // Add your routes here
 
@@ -28,7 +33,7 @@ router.use('/iteration-01', (req, res, next) => {
 
 router.all('*', (req, res, next) => {
   let now = new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })
-  let data = JSON.stringify(req.session.data, null, 2)
+  let data = JSON.stringify(req.session.data, (key, value) => key === 'logoImage' ? '[Uploaded image omitted]' : value, 2)
   console.log(`${now} ${req.url}\nsessiondata: ${data}\n\n`)
   next()
 })
@@ -43,6 +48,31 @@ router.post('/iteration-01/constraints-question-controller', (req, res, next) =>
   } else {
     return res.redirect('/iteration-01/review-form')
   }
+})
+
+router.post('/iteration-01/save-logo', logoUpload.single('logoUpload'), (req, res) => {
+  if (req.file) {
+    req.session.data.logoUpload = req.file.originalname
+    req.session.data.logoImage = {
+      contentType: req.file.mimetype,
+      base64: req.file.buffer.toString('base64')
+    }
+  }
+  res.redirect('/iteration-01/choose-header-colour')
+})
+
+router.get('/iteration-01/logo', (req, res) => {
+  res.set('Cache-Control', 'no-store')
+  const logo = req.session.data.logoImage
+  if (!logo) {
+    return res.status(404).send('No logo has been uploaded in this session.')
+  }
+  res.set({
+    'Content-Type': logo.contentType,
+    'X-Content-Type-Options': 'nosniff',
+    'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+  })
+  res.send(Buffer.from(logo.base64, 'base64'))
 })
 
 router.post('/iteration-01/review-form', (req, res) => {

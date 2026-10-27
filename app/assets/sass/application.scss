@@ -150,3 +150,13 @@
     box-shadow: none;
   }
 }
+
+.app-logo-preview {
+  display: inline-block;
+  padding: govuk-spacing(2);
+
+  &--image {
+    max-width: 100%;
+    max-height: 150px;
+  }
+}

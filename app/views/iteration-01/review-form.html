@@ -79,10 +79,20 @@
           }), summaryListItems) %}
         {% endif %}
 
+        {% set logoHTML %}
+          {% if data['logoImage'] %}
+            <div class="app-logo-preview" style="background-color: {{ data['headerColour'] }}">
+              <img class="app-logo-preview--image" src="/iteration-01/logo" alt="Uploaded local authority logo">
+            </div>
+          {% else %}
+            {{ data['logoUpload'] if data['logoUpload'] else "Not provided" }}
+          {% endif %}
+        {% endset %}
+
         {% set summaryListItems = (summaryListItems.push({
-          key: { text: "Local authority logo" },
-          value: { text: data['logoUpload'] if data['logoUpload'] else "Not provided" },
-          actions: { items: [{ href: "/iteration-01/upload-logo", text: "Change", visuallyHiddenText: "Local authority logo" }] }
+          key: { text: "Logo" },
+          value: { html: logoHTML },
+          actions: { items: [{ href: "/iteration-01/upload-logo", text: "Change", visuallyHiddenText: "logo" }] }
         }), summaryListItems) %}
 
         {% if data['headerColour'] %}
