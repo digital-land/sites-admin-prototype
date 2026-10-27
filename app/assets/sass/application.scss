@@ -1,25 +1,8 @@
 //
 // For guidance on how to add CSS and SCSS see:
 // https://prototype-kit.service.gov.uk/docs/adding-css-javascript-and-images
-// 
 
-// Add extra styles here
-
-
-.app-applies-to {
-  display: inline-block;
-  margin: 10px 0 20px;
-  padding: 10px 15px;
-  background-color: #f3f2f1;
-  font-weight: 700;
-}
-
-.app-url-input--readonly {
-  background-color: #f3f2f1;
-  font-family: monospace;
-}
-
-
+// Shared layout: organisation details, sign-out alignment and unbranded footer.
 .app-main-navigation .app-main-navigation__organisation-name {
   @include govuk-font($size: 19);
   @include govuk-responsive-margin(3, "top");
@@ -29,6 +12,20 @@
   margin-left: auto;
 }
 
+.app-unbranded-footer {
+  background-color: govuk-colour("black", $variant: "tint-95");
+  border-top: 8px solid govuk-functional-colour("border");
+}
+
+.app-unbranded-footer .govuk-footer__crown {
+  display: none;
+}
+
+.app-unbranded-footer .govuk-footer__copyright-logo {
+  display: none;
+}
+
+// Dashboard: stretch the grid columns so cards in each row have equal heights.
 .dashboard-cards {
   display: flex;
   flex-wrap: wrap;
@@ -48,10 +45,7 @@
   box-sizing: border-box;
 }
 
-.view-submission-heading {
-  margin-bottom: 10px;
-}
-
+// Forms: keep buttons content-sized, including on narrow screens.
 .form .govuk-button {
   width: auto !important;
   display: inline-block !important;
@@ -62,61 +56,22 @@
   margin-top: 20px;
 }
 
-.app-action-separator {
-  color: #b1b4b6;
-  font-weight: 300;
-}
-
-.app-team-member-email {
-  overflow-wrap: anywhere;
-}
-
-.app-notification-badge {
-  @include govuk-font($size: 16);
+// Question guidance: highlight which submissions a question applies to.
+.app-applies-to {
   display: inline-block;
-  background-color: govuk-colour("red");
-  border-radius: 10%;
-  color: govuk-colour("white");
-  text-align: center;
-  padding: 2px 6px;
-  margin-left: govuk-spacing(1);
-  vertical-align: middle;
+  margin: 10px 0 20px;
+  padding: 10px 15px;
+  background-color: #f3f2f1;
+  font-weight: 700;
 }
 
-.app-submissions-navigation {
-  background-color: govuk-colour("white");
-  border-top: 1px solid govuk-functional-colour("border");
-  @include govuk-responsive-margin(6, "bottom");
-
-  .govuk-width-container {
-    margin-left: 0;
-    margin-right: 0;
-  }
+// Shareable URLs: distinguish read-only fields from editable form inputs.
+.app-url-input--readonly {
+  background-color: #f3f2f1;
+  font-family: monospace;
 }
 
-.app-submissions-table {
-  overflow-wrap: anywhere;
-}
-
-.app-submission-map {
-  --map-background-colour: #{govuk-colour("black", $variant: "tint-95")};
-  @include govuk-responsive-margin(6, "bottom");
-}
-
-.headerColourPreview-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.headerColourSwatch {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  margin-left: 10px;
-  border: 1px solid #b1b4b6;
-}
-
-// Copy button
+// Compact copy action, with keyboard focus and pressed-state feedback.
 .app-copy-button {
   $copy-button-colour: #00823b;
 
@@ -139,6 +94,7 @@
 
   &:active,
   &:focus {
+    // Compensate for the thicker border without changing the button's size.
     border: 2px solid govuk-functional-colour(focus);
     outline: 2px solid transparent;
     box-shadow: none;
@@ -151,17 +107,18 @@
   }
 }
 
-.app-unbranded-footer {
-  background-color: govuk-colour("black", $variant: "tint-95");
-  border-top: 8px solid govuk-functional-colour("border");
+// Branding previews: show the chosen header colour and contain uploaded logos.
+.headerColourPreview-wrapper {
+  display: flex;
+  align-items: center;
 }
 
-.app-unbranded-footer .govuk-footer__crown {
-  display: none;
-}
-
-.app-unbranded-footer .govuk-footer__copyright-logo {
-  display: none;
+.headerColourSwatch {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-left: 10px;
+  border: 1px solid #b1b4b6;
 }
 
 .app-logo-preview {
@@ -172,4 +129,53 @@
     max-width: 100%;
     max-height: 150px;
   }
+}
+
+// Access management: separate row actions and allow long email addresses to wrap.
+.app-action-separator {
+  color: #b1b4b6;
+  font-weight: 300;
+}
+
+.app-team-member-email {
+  overflow-wrap: anywhere;
+}
+
+// Submissions: reuse the new-submission count in dashboard cards and navigation.
+.app-notification-badge {
+  @include govuk-font($size: 16);
+  display: inline-block;
+  background-color: govuk-colour("red");
+  border-radius: 10%;
+  color: govuk-colour("white");
+  text-align: center;
+  padding: 2px 6px;
+  margin-left: govuk-spacing(1);
+  vertical-align: middle;
+}
+
+.app-submissions-navigation {
+  background-color: govuk-colour("white");
+  border-top: 1px solid govuk-functional-colour("border");
+  @include govuk-responsive-margin(6, "bottom");
+
+  // The navigation is already inside the page container; avoid doubling margins.
+  .govuk-width-container {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.app-submissions-table {
+  overflow-wrap: anywhere;
+}
+
+.view-submission-heading {
+  margin-bottom: 10px;
+}
+
+// The map script reads this background colour when configuring the basemap.
+.app-submission-map {
+  --map-background-colour: #{govuk-colour("black", $variant: "tint-95")};
+  @include govuk-responsive-margin(6, "bottom");
 }
