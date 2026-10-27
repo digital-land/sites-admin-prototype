@@ -8,6 +8,7 @@ require('dotenv').config({ quiet: true })
 const govukPrototypeKit = require('govuk-prototype-kit')
 const { randomUUID } = require('node:crypto')
 const multer = require('multer')
+const sessionDataDefaults = require('./data/session-data-defaults')
 const { createSubmissions, createBoundary, sections: submissionSections } = require('./data/submissions')
 const router = govukPrototypeKit.requests.setupRouter()
 const logoUpload = multer({
@@ -159,6 +160,11 @@ router.post('/iteration-01/change-team-member/:id', (req, res) => {
   delete req.session.data.updatedAccessLevel
 
   res.redirect('/iteration-01/manage-editors')
+})
+
+router.get('/iteration-01/create-form-scenario', (req, res) => {
+  req.session.data = structuredClone(sessionDataDefaults)
+  res.redirect('/iteration-01/start-page')
 })
 
 router.get('/iteration-01/unpublish-scenario', (req, res) => {
