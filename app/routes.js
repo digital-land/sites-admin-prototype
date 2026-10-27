@@ -45,22 +45,26 @@ router.post('/iteration-01/constraints-question-controller', (req, res, next) =>
   }
 })
 
-router.all('/iteration-01/review-form', (req, res, next) => {
-  // create a session variable to indicate that the form has been created when entering this page
+router.post('/iteration-01/review-form', (req, res) => {
   req.session.data['formCreated'] = "true"
-
-  let locals = {}
   if (req.session.data['unpublishForm'] === 'Yes') {
-      // reset unpublished form data
-    req.session.data['unpublishForm'] = null
     req.session.data['formPublished'] = "false"
     req.session.data['formPublishedDate'] = null
-    // set local data that persist for a single page view
-    locals.displayBanner = true
-    locals.bannerMessage = "Form unpublished"
+    req.session.data.formUnpublished = true
   }
+  delete req.session.data.unpublishForm
+  res.redirect('/iteration-01/review-form')
+})
 
-  res.render('iteration-01/review-form', locals)
+router.get('/iteration-01/review-form', (req, res) => {
+  req.session.data['formCreated'] = "true"
+  const formUnpublished = req.session.data.formUnpublished
+  delete req.session.data.formUnpublished
+
+  res.render('iteration-01/review-form', {
+    displayBanner: formUnpublished,
+    bannerMessage: formUnpublished ? 'Form unpublished' : undefined
+  })
 })
 
 router.all('/iteration-01/published-form', (req, res, next) => {
