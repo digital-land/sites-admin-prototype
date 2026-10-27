@@ -127,6 +127,19 @@ router.post('/iteration-01/change-team-member/:id', (req, res) => {
   res.redirect('/iteration-01/manage-editors')
 })
 
+router.get('/iteration-01/unpublish-scenario', (req, res) => {
+  req.session.data.formCreated = 'true'
+  req.session.data.formPublished = 'true'
+  req.session.data.formPublishedDate = new Date().toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Europe/London'
+  })
+  delete req.session.data.unpublishForm
+  res.redirect('/iteration-01/dashboard')
+})
+
 router.get('/iteration-01/submissions-scenario', (req, res) => {
   req.session.data.submissions = createSubmissions()
   req.session.data.submissionDownloads = {}

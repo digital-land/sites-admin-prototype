@@ -1,4 +1,4 @@
-{% extends "layouts/main.html" %}
+{% extends "govuk-prototype-kit/layouts/unbranded.njk" %}
 
 {% set pageName="Home" %}
 
@@ -7,48 +7,89 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% include "govuk-prototype-kit/includes/homepage-top.njk" %}
-
     <h1 class="govuk-heading-xl">
-      {{ serviceName }}
+      {{ serviceName }} prototype
     </h1>
 
-    <h2 class="govuk-heading-l">Prototypes</h2>
+    <h2 class="govuk-heading-l">Iteration 01: view and download submissions</h2>
+    <p class="govuk-body">Updated 27 October 2026.</p>
 
     {{ govukSummaryList({
-      "rows": [
+      card: {
+        title: {
+          text: "Iteration 01 — October 2026"
+        }
+      },
+      rows: [
         {
-          "key": { "text": "First time user" },
-          "value": { "html": "<a href='/iteration-01/start-page'>View prototype</a>" }
+          key: { text: "Scenario 1" },
+          value: { text: "Creating and publishing a form" },
+          actions: {
+            items: [
+              {
+                href: "/iteration-01/start-page",
+                text: "Start",
+                visuallyHiddenText: "scenario 1, creating and publishing a form"
+              }
+            ]
+          }
         },
         {
-          "key": { "text": "Form published - no submissions" },
-          "value": { "html": "<a href='/iteration-01/dashboard-published-form'>View prototype</a>" }
+          key: { text: "Scenario 2" },
+          value: { text: "Viewing submissions and downloading" },
+          actions: {
+            items: [
+              {
+                href: "/iteration-01/submissions-scenario",
+                text: "Start",
+                visuallyHiddenText: "scenario 2, viewing submissions and downloading"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Scenario 3" },
+          value: { text: "Unpublishing a form" },
+          actions: {
+            items: [
+              {
+                href: "/iteration-01/unpublish-scenario",
+                text: "Start",
+                visuallyHiddenText: "scenario 3, unpublishing a form"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Scenario 4" },
+          value: { text: "Adding a user" },
+          actions: {
+            items: [
+              {
+                href: "/iteration-01/dashboard",
+                text: "Start",
+                visuallyHiddenText: "scenario 4, adding a user"
+              }
+            ]
+          }
         }
       ]
     }) }}
 
-    <h2 class="govuk-heading-l">Iteration 01: view and download submissions</h2>
-    <p class="govuk-body">Updated 22 October 2026.</p>
-    <p class="govuk-body">
-      <a class="govuk-link" href="/iteration-01/submissions-scenario">Start the view and download submissions flow</a>
-    </p>
-    <p class="govuk-body">Starting this scenario resets the example submissions to one new submission and three downloaded submissions in your session.</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>View the dashboard count of new submissions.</li>
-      <li>Browse new and downloaded submissions and view their question-and-answer summary lists.</li>
-      <li>Simulate processing a CSV or GeoJSON of new submissions or all submissions.</li>
-      <li>When processing completes, the selected submissions move to Downloaded submissions and the dashboard count updates.</li>
-    </ul>
-    <p class="govuk-body">The examples use shared illustrative answers. Each submission shows a real London site boundary from OpenStreetMap as an example; the boundaries do not match the fictional addresses. Submission details include the same DEFRA interactive map used by the sites form prototype, with an Ordnance Survey basemap, zoom buttons and view-only boundaries.</p>
-    <p class="govuk-body">To enable the basemap locally, set ORDNANCE_SURVEY_API_KEY in your environment or an untracked .env file and restart the prototype. Do not commit the key. Without the key or JavaScript, the submission details remain available.</p>
-    <p class="govuk-body">Actual file downloads remain deferred.</p>
+    <p class="govuk-body">This prototype is to test the admin interface for managing forms, viewing submissions, and managing user access.</p>
+    <p class="govuk-body">Updated 27 October 2026: uploaded logos are shown on the form review page and saved in the current prototype session. Uploads are handled in memory, without creating image files on disk, with a 5 MB limit. Continuing without a new file keeps the saved logo; clearing prototype data removes it.</p>
+
     <h3 class="govuk-heading-m">Hypotheses</h3>
-    <p class="govuk-body">Not yet recorded.</p>
+    <p class="govuk-body">Users are able to:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Create and publish a form</li>
+      <li>View and download submissions</li>
+      <li>Unpublish a form</li>
+      <li>Add a user</li>
+    </ul>
+    
     <h3 class="govuk-heading-m">User testing outcomes and learnings</h3>
     <p class="govuk-body">Not yet recorded.</p>
-
-    {% include "govuk-prototype-kit/includes/homepage-bottom.njk" %}
   </div>
 </div>
 
