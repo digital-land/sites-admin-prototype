@@ -11,12 +11,14 @@ const multer = require('multer')
 const sessionDataDefaults = require('./data/session-data-defaults')
 const { createSubmissions, createBoundary, sections: submissionSections } = require('./data/submissions')
 const router = govukPrototypeKit.requests.setupRouter()
+
+// Keep uploads in memory; image contents are stored in the user's prototype session.
 const logoUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }
 })
 
-// Add your routes here
+// Shared middleware: run before scenario setup and journey routes.
 
 router.use('/iteration-01', (req, res, next) => {
   // Resolve simulated jobs on the next request, even if the user left the processing page.
@@ -33,15 +35,44 @@ router.use('/iteration-01', (req, res, next) => {
 })
 
 router.all('*', (req, res, next) => {
+  // Keep the request/session debug log readable by excluding base64 image contents.
   let now = new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })
   let data = JSON.stringify(req.session.data, (key, value) => key === 'logoImage' ? '[Uploaded image omitted]' : value, 2)
   console.log(`${now} ${req.url}\nsessiondata: ${data}\n\n`)
   next()
 })
 
-/**********************************************************
- * First time user journey
-**********************************************************/
+// Research scenarios: initialise session state, then redirect to the journey.
+
+router.get('/iteration-01/create-form-scenario', (req, res) => {
+  // Clone defaults so mutable arrays and objects are not shared between sessions.
+  req.session.data = structuredClone(sessionDataDefaults)
+  res.redirect('/iteration-01/start-page')
+})
+
+router.get('/iteration-01/submissions-scenario', (req, res) => {
+  req.session.data.submissions = createSubmissions()
+  req.session.data.submissionDownloads = {}
+  req.session.data.formCreated = 'true'
+  req.session.data.formPublished = 'true'
+  res.redirect('/iteration-01/dashboard')
+})
+
+router.get('/iteration-01/unpublish-scenario', (req, res) => {
+  // Keep existing form customisations and submissions when preparing this task.
+  req.session.data.formCreated = 'true'
+  req.session.data.formPublished = 'true'
+  req.session.data.formPublishedDate = new Date().toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Europe/London'
+  })
+  delete req.session.data.unpublishForm
+  res.redirect('/iteration-01/dashboard')
+})
+
+// Form setup: optional local question, logo upload and branding.
 
 router.post('/iteration-01/constraints-question-controller', (req, res, next) => {
   if (req.session.data['addQuestion'] === 'Yes') {
@@ -52,6 +83,7 @@ router.post('/iteration-01/constraints-question-controller', (req, res, next) =>
 })
 
 router.post('/iteration-01/save-logo', logoUpload.single('logoUpload'), (req, res) => {
+  // Continuing without a replacement file preserves the current logo.
   if (req.file) {
     req.session.data.logoUpload = req.file.originalname
     req.session.data.logoImage = {
@@ -63,6 +95,7 @@ router.post('/iteration-01/save-logo', logoUpload.single('logoUpload'), (req, re
 })
 
 router.get('/iteration-01/logo', (req, res) => {
+  // Serve only the current session's image, without caching or active SVG content.
   res.set('Cache-Control', 'no-store')
   const logo = req.session.data.logoImage
   if (!logo) {
@@ -75,6 +108,8 @@ router.get('/iteration-01/logo', (req, res) => {
   })
   res.send(Buffer.from(logo.base64, 'base64'))
 })
+
+// Form review and publication: redirect after updates to refresh template data.
 
 router.post('/iteration-01/review-form', (req, res) => {
   req.session.data['formCreated'] = "true"
@@ -89,6 +124,7 @@ router.post('/iteration-01/review-form', (req, res) => {
 
 router.get('/iteration-01/review-form', (req, res) => {
   req.session.data['formCreated'] = "true"
+  // Consume the success flag so refreshing does not repeat the banner.
   const formUnpublished = req.session.data.formUnpublished
   delete req.session.data.formUnpublished
 
@@ -99,13 +135,16 @@ router.get('/iteration-01/review-form', (req, res) => {
 })
 
 router.all('/iteration-01/published-form', (req, res, next) => {
-  // create a session variable to indicate that the form has been published when entering this page
+  // The Prototype Kit renders the matching template after this state update.
   req.session.data['formPublished'] = "true"
 
   next()
 })
 
+// Team access: session-only invitations, role changes and removal.
+
 router.get('/iteration-01/manage-editors', (req, res) => {
+  // Consume action messages once, and assign IDs to any pre-existing members.
   const teamMemberAdded = req.session.data.teamMemberAdded
   const teamMemberMessage = req.session.data.teamMemberMessage
   delete req.session.data.teamMemberAdded
@@ -136,6 +175,7 @@ router.get('/iteration-01/manage-editors-invited', (req, res) => {
 })
 
 router.all('/iteration-01/change-team-member/:id', (req, res, next) => {
+  // Resolve the member once for both the GET and POST handlers below.
   const member = req.session.data.teamMembers.find(member => member.id === req.params.id)
   if (!member) {
     return res.status(404).send('Team member not found. Return to Manage access to select a team member.')
@@ -162,31 +202,7 @@ router.post('/iteration-01/change-team-member/:id', (req, res) => {
   res.redirect('/iteration-01/manage-editors')
 })
 
-router.get('/iteration-01/create-form-scenario', (req, res) => {
-  req.session.data = structuredClone(sessionDataDefaults)
-  res.redirect('/iteration-01/start-page')
-})
-
-router.get('/iteration-01/unpublish-scenario', (req, res) => {
-  req.session.data.formCreated = 'true'
-  req.session.data.formPublished = 'true'
-  req.session.data.formPublishedDate = new Date().toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'Europe/London'
-  })
-  delete req.session.data.unpublishForm
-  res.redirect('/iteration-01/dashboard')
-})
-
-router.get('/iteration-01/submissions-scenario', (req, res) => {
-  req.session.data.submissions = createSubmissions()
-  req.session.data.submissionDownloads = {}
-  req.session.data.formCreated = 'true'
-  req.session.data.formPublished = 'true'
-  res.redirect('/iteration-01/dashboard')
-})
+// Submissions: shared listing template, answer details and session-scoped map data.
 
 router.get(['/iteration-01/site-submissions', '/iteration-01/downloaded-sites'], (req, res) => {
   const downloaded = req.path === '/iteration-01/downloaded-sites'
@@ -220,9 +236,12 @@ router.get('/iteration-01/submission-boundary/:reference', (req, res) => {
 })
 
 router.get('/iteration-01/view-submission', (req, res) => {
+  // Preserve the older detail URL by selecting the session's first submission.
   const submission = req.session.data.submissions[0]
   res.redirect(submission ? '/iteration-01/view-submission/' + submission.reference : '/iteration-01/site-submissions')
 })
+
+// Download simulation: schedule processing without generating real download files.
 
 router.get('/iteration-01/download-submissions/:scope/:format', (req, res) => {
   const { scope, format } = req.params
@@ -235,6 +254,7 @@ router.get('/iteration-01/download-submissions/:scope/:format', (req, res) => {
   }
 
   const id = randomUUID()
+  // Shared middleware completes the job on a later request after this delay.
   req.session.data.submissionDownloads[id] = {
     scope,
     format: format === 'csv' ? 'CSV' : 'GeoJSON',
@@ -250,6 +270,7 @@ router.get('/iteration-01/submission-download/:id', (req, res) => {
   if (!download) {
     return res.status(404).send('Download not found. Return to View site submissions to start a download.')
   }
+  // The processing page refreshes until the simulated job has completed.
   res.set('Cache-Control', 'no-store')
   res.render('iteration-01/submission-download', {
     download,
