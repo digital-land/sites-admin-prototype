@@ -24,6 +24,13 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    {% if displayBanner %}
+      {{ govukNotificationBanner({
+        type: "success",
+        text: bannerMessage
+      }) }}
+    {% endif %}
+    
     <h1 class="govuk-heading-l">
       {{ pageName }}
     </h1>
@@ -34,13 +41,6 @@
       {% set formAction = "/iteration-01/published-form" %}
     {% endif %}
 
-    {% if displayBanner %}
-      {{ govukNotificationBanner({
-        type: "success",
-        text: bannerMessage
-      }) }}
-    {% endif %}
-    
     <form class="form" action="{{ formAction }}" method="post">
 
       {% set publishedSummaryListItems = [

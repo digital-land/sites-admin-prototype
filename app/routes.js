@@ -78,7 +78,7 @@ router.post('/iteration-01/constraints-question-controller', (req, res, next) =>
   if (req.session.data['addQuestion'] === 'Yes') {
     return res.redirect('/iteration-01/enter-question')
   } else {
-    return res.redirect('/iteration-01/review-form')
+    return res.redirect('/iteration-01/upload-logo')
   }
 })
 

@@ -1,5 +1,5 @@
 {
-  "serviceName": "Publish your call for sites form",
+  "serviceName": "Create a call for sites form",
   "useServiceNavigation": true,
   "plugins": {
     "govuk-frontend": {
