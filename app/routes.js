@@ -174,8 +174,8 @@ router.get('/iteration-01/manage-editors-invited', (req, res) => {
   res.redirect('/iteration-01/manage-editors')
 })
 
-router.all('/iteration-01/change-team-member/:id', (req, res, next) => {
-  // Resolve the member once for both the GET and POST handlers below.
+router.all(['/iteration-01/change-team-member/:id', '/iteration-01/remove-team-member/:id'], (req, res, next) => {
+  // Resolve the member for access changes and removal confirmation.
   const member = req.session.data.teamMembers.find(member => member.id === req.params.id)
   if (!member) {
     return res.status(404).send('Team member not found. Return to Manage access to select a team member.')
@@ -190,16 +190,31 @@ router.get('/iteration-01/change-team-member/:id', (req, res) => {
 })
 
 router.post('/iteration-01/change-team-member/:id', (req, res) => {
-  if (req.body.updatedAccessLevel === 'remove') {
-    req.session.data.teamMembers = req.session.data.teamMembers.filter(member => member.id !== req.params.id)
-    req.session.data.teamMemberMessage = 'Team member removed'
-  } else {
-    res.locals.member.role = req.body.updatedAccessLevel
-    req.session.data.teamMemberMessage = 'Team member access updated'
-  }
   delete req.session.data.updatedAccessLevel
+  if (req.body.updatedAccessLevel === 'remove') {
+    return res.redirect('/iteration-01/remove-team-member/' + req.params.id)
+  }
+  res.locals.member.role = req.body.updatedAccessLevel
+  req.session.data.teamMemberMessage = 'Team member access updated'
 
   res.redirect('/iteration-01/manage-editors')
+})
+
+router.get('/iteration-01/remove-team-member/:id', (req, res) => {
+  res.render('iteration-01/remove-team-member')
+})
+
+router.post('/iteration-01/remove-team-member/:id', (req, res) => {
+  delete req.session.data.confirmRemoveTeamMember
+  if (req.body.confirmRemoveTeamMember === 'Yes') {
+    req.session.data.teamMembers = req.session.data.teamMembers.filter(member => member.id !== req.params.id)
+    req.session.data.teamMemberMessage = 'Team member removed'
+    return res.redirect('/iteration-01/manage-editors')
+  }
+  if (req.body.confirmRemoveTeamMember === 'No') {
+    return res.redirect('/iteration-01/change-team-member/' + req.params.id)
+  }
+  res.redirect('/iteration-01/remove-team-member/' + req.params.id)
 })
 
 // Submissions: shared listing template, answer details and session-scoped map data.
