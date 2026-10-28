@@ -5,7 +5,7 @@
 // Shared layout: organisation details, sign-out alignment and unbranded footer.
 .app-main-navigation .app-main-navigation__organisation-name {
   @include govuk-font($size: 19);
-  @include govuk-responsive-margin(3, "top");
+  @include govuk-responsive-padding(3, "top");
 }
 
 .app-main-navigation .app-main-navigation__item--sign-out {
