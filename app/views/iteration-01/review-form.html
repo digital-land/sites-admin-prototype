@@ -118,7 +118,9 @@
         {# remove actions if form is published #}
         {% if data['formPublished'] == "true" %}
           {% for row in summaryListItems %}
-            {% set row = row|removeAttribute('actions') %}
+            {% if row.key.text != "Call for sites questions" %}
+              {% set row = row|removeAttribute('actions') %}
+            {% endif %}
           {% endfor %}
         {% endif %}
         
@@ -201,7 +203,7 @@
           <p>You can do this:</p>
 
           <ul class="govuk-list govuk-list--bullet">
-            <li>to make changes to it</li>
+            <li>to make changes</li>
             <li>when your call for sites has ended</li>
           </ul>
 
