@@ -55,6 +55,12 @@ router.get('/iteration-01/submissions-scenario', (req, res) => {
   req.session.data.submissionDownloads = {}
   req.session.data.formCreated = 'true'
   req.session.data.formPublished = 'true'
+  req.session.data.formPublishedDate = new Date().toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Europe/London'
+  })
   res.redirect('/iteration-01/dashboard')
 })
 
