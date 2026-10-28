@@ -40,13 +40,18 @@
         <h2 class="govuk-heading-m">{{ section.title }}</h2>
         {% set rows = [] %}
         {% for answer in section.answers %}
-          {% set rows = (rows.push({
-            key: { text: answer[0], classes: "govuk-!-width-one-half" },
-            value: { text: answer[1], classes: "govuk-!-width-one-half" }
-          }), rows) %}
+          {% set rows = (rows.push([
+            { text: answer[0] },
+            { text: answer[1] }
+          ]), rows) %}
         {% endfor %}
-        {{ govukSummaryList({
-          classes: "view-submission-summary-list app-submissions-table",
+        {{ govukTable({
+          classes: "app-submissions-table",
+          attributes: { "aria-label": section.title },
+          head: [
+            { text: "Question", classes: "govuk-!-width-one-half" },
+            { text: "Answer", classes: "govuk-!-width-one-half" }
+          ],
           rows: rows
         }) }}
       {% endfor %}
