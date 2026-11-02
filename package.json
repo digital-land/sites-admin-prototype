@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "26.x"
+  },
   "scripts": {
     "dev": "govuk-prototype-kit dev",
     "serve": "govuk-prototype-kit serve",
