@@ -27,11 +27,11 @@
 
       <!-- Example site boundary showing {{ boundary.properties.name }}, not the actual boundary of {{ submission.location }}. Boundary data © <a class="govuk-link" href="{{ boundary.properties.source }}">OpenStreetMap contributors</a>. -->
 
-      {% if osMapsApiKey %}
+      {% if osMapsConfigured %}
         <p class="govuk-body" id="submission-map-status" role="status">The interactive map requires JavaScript. The submission details are available below.</p>
         <div id="submission-map" class="app-submission-map" aria-label="Site boundary map" 
           data-boundary-url="/iteration-01/submission-boundary/{{ submission.reference }}"
-          data-os-api-key="{{ osMapsApiKey }}" hidden></div>
+          data-os-map-proxy-url="/iteration-01/os-map-proxy" hidden></div>
       {% else %}
         <p class="govuk-body">The map is not configured. Set ORDNANCE_SURVEY_API_KEY in your local environment or .env file, then restart the prototype.</p>
       {% endif %}
@@ -64,7 +64,7 @@
 {% endblock %}
 
 {% block pageScripts %}
-  {% if osMapsApiKey %}
+  {% if osMapsConfigured %}
     <script src="/plugin-assets/%40defra%2Finteractive-map/dist/umd/index.js"></script>
     <script src="/plugin-assets/%40defra%2Finteractive-map/providers/maplibre/dist/umd/index.js"></script>
     <script src="/plugin-assets/%40defra%2Finteractive-map/plugins/datasets/dist/umd/index.js"></script>

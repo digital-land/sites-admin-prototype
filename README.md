@@ -24,8 +24,10 @@ intended for design exploration and user testing, not production use.
 
 The prototype uses GOV.UK Frontend components and GOV.UK Prototype Kit. To
 display site boundary maps, set `ORDNANCE_SURVEY_API_KEY` in your environment
-or in a local `.env` file, then restart the server. The map is optional; the
-submission details remain available without it.
+or in a local `.env` file, then restart the server. Map requests are proxied
+through the application so the key stays on the server and is not included in
+the page or browser requests. Keep the key out of source control. The map is
+optional; the submission details remain available without it.
 
 ## Prototype behaviour and limitations
 
