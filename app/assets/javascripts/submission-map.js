@@ -50,12 +50,16 @@ async function initialiseSubmissionMap() {
     mapProvider: defra.maplibreProvider(),
     mapStyle: {
       id: 'light',
-      url: 'https://raw.githubusercontent.com/OrdnanceSurvey/OS-Vector-Tile-API-Stylesheets/main/OS_VTS_3857_Light.json',
+      url: `${container.dataset.osMapProxyUrl}/maps/vector/ngd/ota/v1/collections/ngd-base/styles/light-3857`,
       attribution: `Contains OS data © Crown copyright and database rights ${new Date().getFullYear()}`,
       backgroundColor: colours.getPropertyValue('--map-background-colour').trim()
     },
     transformRequest(url) {
       const requestUrl = new URL(url, location.href)
+      // The development proxy can expose a different origin from the app server.
+      if (requestUrl.pathname.startsWith(`${container.dataset.osMapProxyUrl}/`)) {
+        return { url: new URL(`${requestUrl.pathname}${requestUrl.search}`, location.href).toString() }
+      }
       if (requestUrl.origin === 'https://api.os.uk') {
         const proxyUrl = new URL(container.dataset.osMapProxyUrl, location.href)
         proxyUrl.pathname += requestUrl.pathname
@@ -64,7 +68,6 @@ async function initialiseSubmissionMap() {
             proxyUrl.searchParams.append(name, value)
           }
         }
-        proxyUrl.searchParams.set('srs', '3857')
         return { url: proxyUrl.toString() }
       }
       return { url }

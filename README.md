@@ -25,10 +25,21 @@ intended for design exploration and user testing, not production use.
 
 The prototype uses GOV.UK Frontend components and GOV.UK Prototype Kit. To
 display site boundary maps, set `ORDNANCE_SURVEY_API_KEY` in your environment
-or in a local `.env` file, then restart the server. Map requests are proxied
-through the application so the key stays on the server and is not included in
-the page or browser requests. Keep the key out of source control. The map is
-optional; the submission details remain available without it.
+or in a local `.env` file, then restart the server. The key's OS Data Hub
+project must have **OS NGD API - Tiles** enabled. The map uses the NGD
+`ngd-base` Light basemap in Web Mercator (`light-3857`), replacing the
+deprecated OS Vector Tile API. Existing keys can be retained if their project
+has NGD API - Tiles access.
+
+Styles, tiles, fonts and sprites are proxied through the application so the
+key stays on the server and is not included in the page or browser requests.
+The proxy adapts NGD's OGC tileset source for MapLibre's tile URL format and
+returns absolute resource URLs on the prototype's origin (required for sprites).
+The browser keeps these requests on the page's origin when the development
+proxy exposes a different port from the application server.
+Adapted styles are not cached; binary map resources retain upstream caching.
+Keep the key out of source control. The map is optional; the submission details
+remain available without it.
 
 ## Deploy to Heroku
 
@@ -41,7 +52,7 @@ Set these config vars are set in the Heroku app
 | Name | Required | Purpose |
 | --- | --- | --- |
 | `PASSWORD` | Yes | Password participants enter to view the prototype. Without it the site shows an error page. |
-| `ORDNANCE_SURVEY_API_KEY` | No | Shows site boundary maps on submission pages. |
+| `ORDNANCE_SURVEY_API_KEY` | No | Shows site boundary maps using an OS Data Hub project with OS NGD API - Tiles enabled. |
 
 The deployments are handled automatically by heroku on pushes to main
 
@@ -56,7 +67,7 @@ Set these config vars are set in the Heroku app
 | Name | Required | Purpose |
 | --- | --- | --- |
 | `PASSWORD` | Yes | Password participants enter to view the prototype. Without it the site shows an error page. |
-| `ORDNANCE_SURVEY_API_KEY` | No | Shows site boundary maps on submission pages. |
+| `ORDNANCE_SURVEY_API_KEY` | No | Shows site boundary maps using an OS Data Hub project with OS NGD API - Tiles enabled. |
 
 The deployments are handled automatically by heroku on pushes to main
 

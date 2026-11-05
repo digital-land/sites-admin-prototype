@@ -15,7 +15,8 @@ const router = govukPrototypeKit.requests.setupRouter()
 
 const osMapApiOrigin = 'https://api.os.uk'
 const osMapProxyPath = '/iteration-01/os-map-proxy'
-const osMapResourcePathPrefix = '/maps/vector/v1/vts'
+const osMapResourcePathPrefix = '/maps/vector/ngd/ota/v1/collections/ngd-base'
+const osMapStylePath = `${osMapResourcePathPrefix}/styles/light-3857`
 
 function getOsMapResponse(url) {
   return new Promise((resolve, reject) => {
@@ -44,12 +45,46 @@ function getOsMapResourcePath(pathname) {
       segment === '..' ||
       /[\/\\\u0000-\u001f]/.test(segment)
     ) ||
-    `/${decodedSegments.slice(0, 4).join('/')}` !== osMapResourcePathPrefix
+    `/${decodedSegments.slice(0, 7).join('/')}` !== osMapResourcePathPrefix ||
+    decodedSegments.length <= 7
   ) {
     return null
   }
 
+  const resource = decodedSegments.slice(7).join('/')
+  const isStyleResource = /^styles\/light-3857(?:\/sprites\/sprite(?:@2x)?(?:\.(?:json|png))?|\/fonts\/[^/]+\/(?:\d+-\d+|\{range\})\.pbf)?$/.test(resource)
+  const isTile = /^tiles\/3857\/\d+\/\d+\/\d+$/.test(resource)
+  if (!isStyleResource && !isTile) return null
+
   return `/${decodedSegments.map(segment => encodeURIComponent(segment)).join('/')}`
+}
+
+function adaptOsMapStyle(style, proxyOrigin) {
+  const source = style.sources?.['ngd-base']
+  if (source?.type !== 'vector' || typeof source.url !== 'string') {
+    throw new Error('Unexpected NGD map source')
+  }
+  const sourceUrl = new URL(source.url)
+  if (sourceUrl.origin !== osMapApiOrigin || sourceUrl.pathname !== `${osMapResourcePathPrefix}/tiles/3857`) {
+    throw new Error('Unexpected NGD map source')
+  }
+
+  // NGD serves OGC tileset metadata, not the TileJSON that MapLibre expects.
+  source.tiles = [`${proxyOrigin}${osMapProxyPath}${osMapResourcePathPrefix}/tiles/3857/{z}/{y}/{x}`]
+  delete source.url
+
+  for (const property of ['sprite', 'glyphs']) {
+    const resourceUrl = new URL(style[property])
+    if (
+      resourceUrl.origin !== osMapApiOrigin ||
+      !getOsMapResourcePath(`${osMapProxyPath}${resourceUrl.pathname}`)
+    ) {
+      throw new Error(`Unexpected NGD ${property} resource`)
+    }
+    // MapLibre requires absolute sprite URLs; preserve font template placeholders.
+    style[property] = `${proxyOrigin}${osMapProxyPath}${resourceUrl.pathname.replaceAll('%7B', '{').replaceAll('%7D', '}')}`
+  }
+  return style
 }
 
 async function proxyOsMapRequest(req, res) {
@@ -71,7 +106,6 @@ async function proxyOsMapRequest(req, res) {
     }
   }
   upstreamUrl.searchParams.set('key', apiKey)
-  upstreamUrl.searchParams.set('srs', '3857')
 
   try {
     const response = await getOsMapResponse(upstreamUrl)
@@ -87,12 +121,17 @@ async function proxyOsMapRequest(req, res) {
 
     const chunks = []
     for await (const chunk of response) chunks.push(chunk)
+    const body = Buffer.concat(chunks)
+    const isStyle = resourcePath === osMapStylePath
+    const result = isStyle
+      ? JSON.stringify(adaptOsMapStyle(JSON.parse(body.toString('utf8')), `${req.protocol}://${req.get('host')}`))
+      : body
     res.set({
-      'Content-Type': response.headers['content-type'] || 'application/octet-stream',
-      'Cache-Control': response.headers['cache-control'] || 'public, max-age=300',
+      'Content-Type': isStyle ? 'application/json' : response.headers['content-type'] || 'application/octet-stream',
+      'Cache-Control': isStyle ? 'no-store' : response.headers['cache-control'] || 'public, max-age=300',
       'X-Content-Type-Options': 'nosniff'
     })
-    return res.send(Buffer.concat(chunks))
+    return res.send(result)
   } catch (error) {
     console.error('Ordnance Survey map request failed:', error.name)
     return res.status(502).send('Map resource is unavailable.')
