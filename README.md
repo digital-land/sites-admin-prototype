@@ -25,8 +25,25 @@ intended for design exploration and user testing, not production use.
 
 The prototype uses GOV.UK Frontend components and GOV.UK Prototype Kit. To
 display site boundary maps, set `ORDNANCE_SURVEY_API_KEY` in your environment
-or in a local `.env` file, then restart the server. The map is optional; the
-submission details remain available without it.
+or in a local `.env` file, then restart the server. Map requests are proxied
+through the application so the key stays on the server and is not included in
+the page or browser requests. Keep the key out of source control. The map is
+optional; the submission details remain available without it.
+
+## Deploy to Heroku
+
+The `Procfile` starts the prototype with `npm start`, and `package.json` pins
+Node.js 26 (LTS). Heroku sets `NODE_ENV=production` and `PORT` for you, so the
+Prototype Kit turns on password protection and redirects to HTTPS.
+
+Set these config vars are set in the Heroku app
+
+| Name | Required | Purpose |
+| --- | --- | --- |
+| `PASSWORD` | Yes | Password participants enter to view the prototype. Without it the site shows an error page. |
+| `ORDNANCE_SURVEY_API_KEY` | No | Shows site boundary maps on submission pages. |
+
+The deployments are handled automatically by heroku on pushes to main
 
 ## Deploy to Heroku
 

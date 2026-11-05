@@ -57,9 +57,15 @@ async function initialiseSubmissionMap() {
     transformRequest(url) {
       const requestUrl = new URL(url, location.href)
       if (requestUrl.origin === 'https://api.os.uk') {
-        requestUrl.searchParams.set('key', container.dataset.osApiKey)
-        requestUrl.searchParams.set('srs', '3857')
-        return { url: requestUrl.toString() }
+        const proxyUrl = new URL(container.dataset.osMapProxyUrl, location.href)
+        proxyUrl.pathname += requestUrl.pathname
+        for (const [name, value] of requestUrl.searchParams) {
+          if (name.toLowerCase() !== 'key' && name.toLowerCase() !== 'srs') {
+            proxyUrl.searchParams.append(name, value)
+          }
+        }
+        proxyUrl.searchParams.set('srs', '3857')
+        return { url: proxyUrl.toString() }
       }
       return { url }
     },
