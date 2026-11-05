@@ -55,6 +55,7 @@ This project uses GOV.UK Frontend Nunjucks macros.
 
 ## Prototype behaviour and checks
 
+- This prototype is for rapid iteration and user research, not production-level code. Do not add automated tests unless explicitly requested; prefer lightweight browser and journey checks.
 - Store journey data in the prototype session so additions and changes persist across pages without affecting other sessions. Do not build real account provisioning or email delivery unless requested.
 - Show success banners once after an action, then clear them on subsequent visits.
 - Check the full journey, including saved values, Cancel, relevant update/removal actions and narrow-screen layouts. Verify forms and navigation work without page JavaScript.
